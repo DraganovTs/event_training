@@ -7,6 +7,7 @@ import org.homemade.product.service.service.ProductService;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -21,7 +22,7 @@ public class ProductController {
     }
 
     @PostMapping("/create")
-    public ResponseEntity<ProductResponseDTO> createProduct(@Valid  ProductRequestDTO request) {
+    public ResponseEntity<ProductResponseDTO> createProduct(@Valid  @RequestBody ProductRequestDTO request) {
         ProductResponseDTO response = productService.createProduct(request);
         return ResponseEntity.ok(response);
     }

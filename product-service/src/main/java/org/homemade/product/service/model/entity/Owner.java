@@ -7,7 +7,6 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.*;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -21,6 +20,7 @@ import java.util.UUID;
 public class Owner {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "owner_id")
     private UUID ownerId;
     @NotBlank(message = "Owner name must not be blank")
@@ -33,7 +33,7 @@ public class Owner {
     @Column(name = "owner_email")
     private String ownerEmail;
     @OneToMany(mappedBy = "owner", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Product> products = new ArrayList<>();
+    private List<Product> products;
 
 
 }

@@ -1,7 +1,7 @@
 package org.homemade.product.service.service;
 
 import jakarta.validation.Valid;
-import org.homemade.product.service.exception.ProductNotFoundException;
+import org.homemade.product.service.exception.ProductAlreadyExistsException;
 import org.homemade.product.service.mapper.ProductServiceMapper;
 import org.homemade.product.service.model.dto.ProductRequestDTO;
 import org.homemade.product.service.model.dto.ProductResponseDTO;
@@ -48,7 +48,7 @@ public class ProductService {
     @Transactional(readOnly = true)
     public void checkProductExist(String name) {
         if (productRepository.existsByName(name)) {
-            throw new ProductNotFoundException("Product already exists: " + name);
+            throw new ProductAlreadyExistsException("Product already exists: " + name);
         }
     }
 }

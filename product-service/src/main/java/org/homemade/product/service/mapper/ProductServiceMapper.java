@@ -10,6 +10,8 @@ import org.homemade.product.service.model.entity.Owner;
 import org.homemade.product.service.model.entity.Product;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
+
 @Component
 public class ProductServiceMapper {
     public Product mapProductRequestToProduct(@Valid ProductRequestDTO request, Category category, Owner owner) {
@@ -51,6 +53,7 @@ public class ProductServiceMapper {
         return Owner.builder()
                 .ownerName(request.getOwnerName())
                 .ownerEmail(request.getOwnerEmail())
+                .products(new ArrayList<>())
                 .build();
     }
 
@@ -65,6 +68,7 @@ public class ProductServiceMapper {
     public Category mapCategoryDTOtoCategory(CategoryDTO request) {
         return Category.builder()
                 .categoryName(request.getCategoryName())
+                .products(new ArrayList<>())
                 .build();
     }
 }

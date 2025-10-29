@@ -1,10 +1,12 @@
 package org.homemade.product.service.controller;
 
+import jakarta.validation.Valid;
 import org.homemade.product.service.model.dto.OwnerDTO;
 import org.homemade.product.service.service.OwnerService;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -20,7 +22,7 @@ public class OwnerController {
 
 
     @PostMapping("/create")
-    public ResponseEntity<OwnerDTO> createOwner(OwnerDTO request) {
+    public ResponseEntity<OwnerDTO> createOwner(@Valid @RequestBody OwnerDTO request) {
 
         OwnerDTO response = ownerService.createOwner(request);
         return ResponseEntity.ok(response);

@@ -1,6 +1,7 @@
 package org.homemade.product.service.service;
 
 
+import org.homemade.product.service.exception.OwnerAlreadyExistsException;
 import org.homemade.product.service.exception.OwnerNotFoundException;
 import org.homemade.product.service.mapper.ProductServiceMapper;
 import org.homemade.product.service.model.dto.OwnerDTO;
@@ -29,6 +30,7 @@ public class OwnerService {
         ));
     }
 
+    @Transactional
     public OwnerDTO createOwner(OwnerDTO request) {
 
         checkIfOwnerExist(request.getOwnerEmail());
@@ -44,7 +46,7 @@ public class OwnerService {
     @Transactional(readOnly = true)
     public void checkIfOwnerExist(String ownerEmail) {
         if (ownerRepository.existsByOwnerEmail(ownerEmail)) {
-            throw new OwnerNotFoundException("Owner already exists: " + ownerEmail);
+            throw new OwnerAlreadyExistsException("Owner already exists: " + ownerEmail);
         }
     }
 }

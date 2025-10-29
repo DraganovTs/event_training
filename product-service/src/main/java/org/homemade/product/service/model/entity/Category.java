@@ -18,6 +18,7 @@ import java.util.UUID;
 public class Category {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "category_id")
     private UUID categoryId;
     @NotBlank(message = "Category name must not be blank")

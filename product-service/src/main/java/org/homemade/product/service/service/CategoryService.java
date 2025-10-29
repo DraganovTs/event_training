@@ -1,5 +1,6 @@
 package org.homemade.product.service.service;
 
+import org.homemade.product.service.exception.CategoryAlreadyExistsException;
 import org.homemade.product.service.exception.CategoryNotFoundException;
 import org.homemade.product.service.mapper.ProductServiceMapper;
 import org.homemade.product.service.model.dto.CategoryDTO;
@@ -27,6 +28,7 @@ public class CategoryService {
         ));
     }
 
+    @Transactional
     public CategoryDTO createCategory(CategoryDTO request) {
 
         checkCategoryExist(request.getCategoryName());
@@ -39,7 +41,7 @@ public class CategoryService {
     @Transactional(readOnly = true)
     public void checkCategoryExist(String categoryName) {
         if (categoryRepository.existsByCategoryName(categoryName)){
-            throw new CategoryNotFoundException("Category already exists: " + categoryName);
+            throw new CategoryAlreadyExistsException("Category already exists: " + categoryName);
         }
     }
 }
