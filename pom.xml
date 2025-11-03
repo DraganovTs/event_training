@@ -14,6 +14,7 @@
         <module>product-service</module>
         <module>eureka-server</module>
         <module>common</module>
+        <module>gateway-server</module>
     </modules>
 
     <parent>
@@ -79,6 +80,12 @@
             <dependency>
                 <groupId>org.springframework.cloud</groupId>
                 <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
+                <version>${spring.cloud.starter.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-starter-gateway</artifactId>
                 <version>${spring.cloud.starter.version}</version>
             </dependency>
 
