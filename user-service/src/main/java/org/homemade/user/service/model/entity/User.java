@@ -56,6 +56,7 @@ public class User {
     @Valid
     private Address address;
 
+    @Builder.Default
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private AccountStatus accountStatus = AccountStatus.PENDING;
@@ -73,5 +74,12 @@ public class User {
     @CollectionTable(name = "user_owned_products", joinColumns = @JoinColumn(name = "user_id"))
     @Column(name = "product_id")
     private List<UUID> ownedProductIds = new ArrayList<>();
+
+
+    @PrePersist
+    protected void onCreate() {
+        this.createdAt = new Date();
+        this.updatedAt = new Date();
+    }
 
 }

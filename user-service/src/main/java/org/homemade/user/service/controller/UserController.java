@@ -28,7 +28,7 @@ public class UserController {
         return ResponseEntity.ok(result);
     }
 
-    @GetMapping("/user/{userId}")
+    @GetMapping("/{userId}")
     public ResponseEntity<UserResponseDTO> getUser(@PathVariable("userId") UUID userId) {
         UserResponseDTO result = userService.getUserById(userId);
 
