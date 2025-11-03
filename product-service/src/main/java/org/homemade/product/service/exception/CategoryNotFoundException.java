@@ -1,5 +1,6 @@
 package org.homemade.product.service.exception;
 
+import org.homemade.common.exception.BaseException;
 import org.springframework.http.HttpStatus;
 
 

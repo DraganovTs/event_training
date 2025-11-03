@@ -44,6 +44,14 @@
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
         </dependency>
+
+        <!-- internal modules -->
+
+        <dependency>
+            <groupId>org.homemade</groupId>
+            <artifactId>common</artifactId>
+            <version>${project.version}</version>
+        </dependency>
     </dependencies>
 
 </project>

@@ -1,4 +1,4 @@
-package org.homemade.product.service.exception;
+package org.homemade.common.exception;
 
 import lombok.Builder;
 import lombok.Data;

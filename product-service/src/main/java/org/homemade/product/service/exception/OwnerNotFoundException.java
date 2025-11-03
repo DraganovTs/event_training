@@ -1,8 +1,9 @@
 package org.homemade.product.service.exception;
 
+import org.homemade.common.exception.BaseException;
 import org.springframework.http.HttpStatus;
 
-public class OwnerNotFoundException extends BaseException{
+public class OwnerNotFoundException extends BaseException {
 
     public OwnerNotFoundException(String message) {
         super(message , "OWNER_NOT_FOUND" , HttpStatus.NOT_FOUND);

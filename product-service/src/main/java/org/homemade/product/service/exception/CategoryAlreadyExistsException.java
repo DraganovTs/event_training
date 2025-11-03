@@ -1,8 +1,9 @@
 package org.homemade.product.service.exception;
 
+import org.homemade.common.exception.BaseException;
 import org.springframework.http.HttpStatus;
 
-public class CategoryAlreadyExistsException extends BaseException{
+public class CategoryAlreadyExistsException extends BaseException {
 
     public CategoryAlreadyExistsException(String message) {
         super(message, "CATEGORY_ALREADY_EXISTS", HttpStatus.CONFLICT);
