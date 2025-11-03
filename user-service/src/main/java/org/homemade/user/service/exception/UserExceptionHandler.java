@@ -17,6 +17,11 @@ public class UserExceptionHandler {
         return buildErrorResponse(exception, request, HttpStatus.CONFLICT, "USER_ALREADY_EXIST");
     }
 
+    @ExceptionHandler(value = {UserNotFoundException.class})
+    public ResponseEntity<ErrorResponseDTO> handleUserNotFoundException(Exception exception, WebRequest request) {
+        return buildErrorResponse(exception, request, HttpStatus.NOT_FOUND, "USER_NOT_FOUND");
+    }
+
 
     protected ResponseEntity<ErrorResponseDTO> buildErrorResponse(WebRequest request,
                                                                   HttpStatus status,
