@@ -2,6 +2,8 @@ package org.homemade.gateway.server.model.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import org.homemade.common.model.dto.ProductResponseDTO;
+import org.homemade.common.model.dto.UserResponseDTO;
 
 import java.util.List;
 
@@ -9,7 +11,7 @@ import java.util.List;
 @AllArgsConstructor
 public class SummaryDTO {
 
-    private UserDTO user;
-    private List<ProductDTO> products;
+    private UserResponseDTO user;
+    private List<ProductResponseDTO> products;
 
 }

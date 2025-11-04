@@ -2,7 +2,7 @@ package org.homemade.user.service.controller;
 
 import jakarta.validation.Valid;
 import org.homemade.user.service.model.dto.UserRequestDTO;
-import org.homemade.user.service.model.dto.UserResponseDTO;
+import org.homemade.common.model.dto.UserResponseDTO;
 import org.homemade.user.service.service.UserService;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;

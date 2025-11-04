@@ -1,7 +1,7 @@
 package org.homemade.product.service.controller;
 
 import jakarta.validation.Valid;
-import org.homemade.product.service.model.dto.CategoryDTO;
+import org.homemade.common.model.dto.CategoryDTO;
 import org.homemade.product.service.service.CategoryService;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;

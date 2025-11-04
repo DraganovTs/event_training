@@ -3,7 +3,7 @@ package org.homemade.product.service.service;
 import org.homemade.product.service.exception.CategoryAlreadyExistsException;
 import org.homemade.product.service.exception.CategoryNotFoundException;
 import org.homemade.product.service.mapper.ProductServiceMapper;
-import org.homemade.product.service.model.dto.CategoryDTO;
+import org.homemade.common.model.dto.CategoryDTO;
 import org.homemade.product.service.model.entity.Category;
 import org.homemade.product.service.repository.CategoryRepository;
 import org.springframework.stereotype.Service;

@@ -1,4 +1,4 @@
-package org.homemade.user.service.model.dto;
+package org.homemade.common.model.dto;
 
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;

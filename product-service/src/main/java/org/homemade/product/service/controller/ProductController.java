@@ -2,14 +2,14 @@ package org.homemade.product.service.controller;
 
 import jakarta.validation.Valid;
 import org.homemade.product.service.model.dto.ProductRequestDTO;
-import org.homemade.product.service.model.dto.ProductResponseDTO;
+import org.homemade.common.model.dto.ProductResponseDTO;
 import org.homemade.product.service.service.ProductService;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.UUID;
 
 
 @RestController
@@ -23,8 +23,14 @@ public class ProductController {
     }
 
     @PostMapping("/create")
-    public ResponseEntity<ProductResponseDTO> createProduct(@Valid  @RequestBody ProductRequestDTO request) {
+    public ResponseEntity<ProductResponseDTO> createProduct(@Valid @RequestBody ProductRequestDTO request) {
         ProductResponseDTO response = productService.createProduct(request);
         return ResponseEntity.ok(response);
+    }
+
+    @GetMapping()
+    public ResponseEntity<List<ProductResponseDTO>> getAllProductsForUser(@RequestParam("userId") UUID userId) {
+        List<ProductResponseDTO> ownerProducts = productService.getAllProductsForUser(userId);
+        return ResponseEntity.ok(ownerProducts);
     }
 }

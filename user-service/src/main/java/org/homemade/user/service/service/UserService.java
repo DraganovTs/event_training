@@ -6,7 +6,7 @@ import org.homemade.user.service.exception.UserAlreadyExistException;
 import org.homemade.user.service.exception.UserNotFoundException;
 import org.homemade.user.service.mapper.UserMapper;
 import org.homemade.user.service.model.dto.UserRequestDTO;
-import org.homemade.user.service.model.dto.UserResponseDTO;
+import org.homemade.common.model.dto.UserResponseDTO;
 import org.homemade.user.service.model.entity.User;
 import org.homemade.user.service.repository.UserRepository;
 import org.springframework.stereotype.Service;

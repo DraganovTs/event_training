@@ -58,4 +58,10 @@ public class Product {
     private Owner owner;
 
 
+    @PrePersist
+    protected void onCreate() {
+        this.dateCreated = new Date();
+        this.lastUpdated = new Date();
+    }
+
 }

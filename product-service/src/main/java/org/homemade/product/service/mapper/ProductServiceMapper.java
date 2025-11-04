@@ -1,10 +1,10 @@
 package org.homemade.product.service.mapper;
 
 import jakarta.validation.Valid;
-import org.homemade.product.service.model.dto.CategoryDTO;
-import org.homemade.product.service.model.dto.OwnerDTO;
+import org.homemade.common.model.dto.CategoryDTO;
+import org.homemade.common.model.dto.OwnerDTO;
 import org.homemade.product.service.model.dto.ProductRequestDTO;
-import org.homemade.product.service.model.dto.ProductResponseDTO;
+import org.homemade.common.model.dto.ProductResponseDTO;
 import org.homemade.product.service.model.entity.Category;
 import org.homemade.product.service.model.entity.Owner;
 import org.homemade.product.service.model.entity.Product;
@@ -51,6 +51,7 @@ public class ProductServiceMapper {
 
     public Owner mapOwnerDTOToOwner(OwnerDTO request) {
         return Owner.builder()
+                .ownerId(request.getOwnerId())
                 .ownerName(request.getOwnerName())
                 .ownerEmail(request.getOwnerEmail())
                 .products(new ArrayList<>())

@@ -1,4 +1,4 @@
-package org.homemade.product.service.model.dto;
+package org.homemade.common.model.dto;
 
 import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;

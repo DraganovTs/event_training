@@ -4,7 +4,7 @@ package org.homemade.product.service.service;
 import org.homemade.product.service.exception.OwnerAlreadyExistsException;
 import org.homemade.product.service.exception.OwnerNotFoundException;
 import org.homemade.product.service.mapper.ProductServiceMapper;
-import org.homemade.product.service.model.dto.OwnerDTO;
+import org.homemade.common.model.dto.OwnerDTO;
 import org.homemade.product.service.model.entity.Owner;
 import org.homemade.product.service.repository.OwnerRepository;
 import org.springframework.stereotype.Service;

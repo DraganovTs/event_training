@@ -20,7 +20,6 @@ import java.util.UUID;
 public class Owner {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "owner_id")
     private UUID ownerId;
     @NotBlank(message = "Owner name must not be blank")

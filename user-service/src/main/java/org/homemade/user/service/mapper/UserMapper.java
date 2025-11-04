@@ -1,9 +1,9 @@
 package org.homemade.user.service.mapper;
 
 import jakarta.validation.Valid;
-import org.homemade.user.service.model.dto.AddressDTO;
+import org.homemade.common.model.dto.AddressDTO;
 import org.homemade.user.service.model.dto.UserRequestDTO;
-import org.homemade.user.service.model.dto.UserResponseDTO;
+import org.homemade.common.model.dto.UserResponseDTO;
 import org.homemade.user.service.model.entity.Address;
 import org.homemade.user.service.model.entity.User;
 import org.springframework.stereotype.Component;
