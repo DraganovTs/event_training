@@ -39,6 +39,11 @@
             <artifactId>lombok</artifactId>
         </dependency>
         <dependency>
+            <groupId>org.axonframework</groupId>
+            <artifactId>axon-spring-boot-starter</artifactId>
+            <version>${axon.spring.boot.starter.version}</version>
+        </dependency>
+        <dependency>
             <groupId>org.homemade</groupId>
             <artifactId>common</artifactId>
         </dependency>

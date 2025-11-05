@@ -25,3 +25,7 @@ eureka:
     register-with-eureka: true
     service-url:
       defaultZone: http://localhost:8070/eureka/
+
+axon:
+  axonserver:
+    servers: localhost:8124

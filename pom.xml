@@ -30,6 +30,7 @@
         <project.lombok.version>1.18.34</project.lombok.version>
         <jakarta.validation.api.version>3.1.1</jakarta.validation.api.version>
         <spring.cloud.starter.version>4.2.0</spring.cloud.starter.version>
+        <axon.spring.boot.starter.version>4.12.1</axon.spring.boot.starter.version>
     </properties>
 
     <dependencyManagement>
@@ -93,6 +94,12 @@
                 <groupId>org.homemade</groupId>
                 <artifactId>common</artifactId>
                 <version>${project.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.axonframework</groupId>
+                <artifactId>axon-spring-boot-starter</artifactId>
+                <version>${axon.spring.boot.starter.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
