@@ -31,6 +31,7 @@
         <jakarta.validation.api.version>3.1.1</jakarta.validation.api.version>
         <spring.cloud.starter.version>4.2.0</spring.cloud.starter.version>
         <axon.spring.boot.starter.version>4.12.1</axon.spring.boot.starter.version>
+        <protobuf.java.version>3.25.3</protobuf.java.version>
     </properties>
 
     <dependencyManagement>
@@ -100,6 +101,12 @@
                 <groupId>org.axonframework</groupId>
                 <artifactId>axon-spring-boot-starter</artifactId>
                 <version>${axon.spring.boot.starter.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.google.protobuf</groupId>
+                <artifactId>protobuf-java</artifactId>
+                <version>${protobuf.java.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

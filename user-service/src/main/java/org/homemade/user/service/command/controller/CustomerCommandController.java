@@ -1,14 +1,8 @@
 package org.homemade.user.service.command.controller;
 
 import jakarta.validation.Valid;
-import org.axonframework.commandhandling.gateway.CommandGateway;
-import org.homemade.user.service.command.CreateUserCommand;
-import org.homemade.user.service.command.DeleteUserCommand;
-import org.homemade.user.service.command.UpdateUserCommand;
 import org.homemade.user.service.model.dto.ResponseDTO;
 import org.homemade.user.service.model.dto.UserRequestDTO;
-import org.homemade.user.service.model.entity.Address;
-import org.homemade.user.service.model.enums.AccountStatus;
 import org.homemade.user.service.service.UserCommandService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -16,7 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
+
 import java.util.UUID;
 
 @RestController
