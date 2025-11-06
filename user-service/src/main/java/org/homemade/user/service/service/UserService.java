@@ -1,12 +1,12 @@
 package org.homemade.user.service.service;
 
 import jakarta.transaction.Transactional;
-import jakarta.validation.Valid;
+import org.homemade.user.service.command.event.UserCreatedEvent;
+import org.homemade.user.service.command.event.UserDeletedEvent;
+import org.homemade.user.service.command.event.UserUpdatedEvent;
 import org.homemade.user.service.exception.UserAlreadyExistException;
 import org.homemade.user.service.exception.UserNotFoundException;
-import org.homemade.user.service.mapper.UserMapper;
-import org.homemade.user.service.model.dto.UserRequestDTO;
-import org.homemade.common.model.dto.UserResponseDTO;
+import org.homemade.user.service.mapper.UserQueryMapper;
 import org.homemade.user.service.model.entity.User;
 import org.homemade.user.service.repository.UserRepository;
 import org.springframework.stereotype.Service;
@@ -17,34 +17,43 @@ import java.util.UUID;
 public class UserService {
 
     private final UserRepository userRepository;
-    private final UserMapper mapper;
+    private final UserQueryMapper mapper;
 
-    public UserService(UserRepository userRepository, UserMapper mapper) {
+
+    public UserService(UserRepository userRepository, UserQueryMapper mapper) {
         this.userRepository = userRepository;
         this.mapper = mapper;
     }
 
     @Transactional
-    public UserResponseDTO createUser(@Valid UserRequestDTO request) {
+    public void createUser(UserCreatedEvent event) {
 
-        checkUserExist(request.getEmail(), request.getUsername());
+        checkUserExist(event.getEmail(), event.getUsername());
 
-        User userToSave = mapper.maoUserRequestDTOToUser(request);
+        User userToSave = mapper.mapUserCreatedEventToUser(event);
+        userRepository.save(userToSave);
 
-        User savedUser = userRepository.save(userToSave);
+    }
 
-        UserResponseDTO responseDTO = mapper.mapUserToUserResponseDTO(savedUser);
-
-        return responseDTO;
+    @Transactional
+    public void updateUser(UserUpdatedEvent event) {
+        checkUserExistById(event.getUserId());
+        User userToUpdate = mapper.mapUserUpdateEvent(event);
+        userRepository.save(userToUpdate);
     }
 
 
-    public UserResponseDTO getUserById(UUID userId) {
+    @Transactional
+    public void deleteUser(UserDeletedEvent event) {
+        checkUserExistById(event.getUserId());
+        userRepository.deleteById(event.getUserId());
+    }
 
-        User foundedUser = userRepository.findById(userId).orElseThrow(
-                () -> new UserNotFoundException("User not found whit Id: " + userId));
-
-        return mapper.mapUserToUserResponseDTO(foundedUser);
+    @Transactional
+    public void checkUserExistById(UUID userId) {
+        if (!userRepository.existsById(userId)) {
+            throw new UserNotFoundException("User not found with id: " + userId);
+        }
     }
 
 
@@ -55,4 +64,6 @@ public class UserService {
         }
 
     }
+
+
 }
