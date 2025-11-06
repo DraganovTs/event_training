@@ -10,10 +10,15 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.homemade.common.model.dto.AddressDTO;
 
+import java.util.List;
+import java.util.UUID;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class UserRequestDTO {
+
+    private UUID userId;
 
     @NotBlank(message = "Username is required")
     @Size(min = 4, max = 20, message = "Username must be between 4 and 20 characters")
@@ -35,4 +40,6 @@ public class UserRequestDTO {
 
     @Valid
     private AddressDTO address;
+
+    private List<UUID> productIds;
 }
