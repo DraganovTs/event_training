@@ -30,3 +30,7 @@ eureka:
 axon:
   axonserver:
     servers: localhost:8124
+
+logging:
+  level:
+    org.hibernate.SQL: WARN
