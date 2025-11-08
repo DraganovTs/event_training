@@ -1,7 +1,6 @@
 package org.homemade.user.service.query.controller;
 
 import org.homemade.common.model.dto.UserResponseDTO;
-import org.homemade.user.service.query.FindUserQuery;
 import org.homemade.user.service.service.UserQueryService;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
