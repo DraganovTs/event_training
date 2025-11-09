@@ -55,7 +55,7 @@ public class UserService {
     }
 
     public UserResponseDTO getUserByEmail(FindUserQuery findUserQuery) {
-        checkUserExistByEmail(findUserQuery.getEmail());
+//        checkUserExistByEmail(findUserQuery.getEmail());
         User user = userRepository.findByEmail(findUserQuery.getEmail()).get();
         return userMapper.mapUserToUserResponseDTO(user);
     }
