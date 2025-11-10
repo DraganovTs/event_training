@@ -35,8 +35,7 @@ public class UserService {
     public void createUser(UserCreatedEvent event) {
 
         System.out.println("db try to save user: " + event.getEmail());
-//        checkUserExist(event.getEmail(), event.getUsername());
-
+        checkUserExist(event.getEmail(), event.getUsername());
         User userToSave = userQueryMapper.mapUserCreatedEventToUser(event);
         userRepository.save(userToSave);
 
@@ -58,7 +57,7 @@ public class UserService {
     }
 
     public UserResponseDTO getUserByEmail(FindUserQuery findUserQuery) {
-//        checkUserExistByEmail(findUserQuery.getEmail());
+        checkUserExistByEmail(findUserQuery.getEmail());
         User user = userRepository.findByEmail(findUserQuery.getEmail()).get();
         return userMapper.mapUserToUserResponseDTO(user);
     }
