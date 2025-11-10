@@ -30,10 +30,11 @@ public class UserQueryService {
     }
 
     public List<UserResponseDTO> getAllUsers() {
-        System.out.println("user query service called");
-        FindAllUsersQuery findAllUsersQuery = new FindAllUsersQuery();
-        System.out.println("error is in findAllUsersQuery");
-        List<User> result = queryGateway.query(findAllUsersQuery, ResponseTypes.multipleInstancesOf(User.class)).join();
-        return result.stream().map(userMapper::mapUserToUserResponseDTO).toList();
+        return queryGateway
+                .query(new FindAllUsersQuery(), ResponseTypes.multipleInstancesOf(User.class))
+                .join()
+                .stream()
+                .map(userMapper::mapUserToUserResponseDTO)
+                .toList();
     }
 }
