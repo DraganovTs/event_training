@@ -14,6 +14,7 @@ import org.homemade.user.service.query.FindUserQuery;
 import org.homemade.user.service.repository.UserRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -33,7 +34,8 @@ public class UserService {
     @Transactional
     public void createUser(UserCreatedEvent event) {
 
-        checkUserExist(event.getEmail(), event.getUsername());
+        System.out.println("db try to save user: " + event.getEmail());
+//        checkUserExist(event.getEmail(), event.getUsername());
 
         User userToSave = userQueryMapper.mapUserCreatedEventToUser(event);
         userRepository.save(userToSave);
@@ -42,6 +44,7 @@ public class UserService {
 
     @Transactional
     public void updateUser(UserUpdatedEvent event) {
+
         checkUserExistById(event.getUserId());
         User userToUpdate = userQueryMapper.mapUserUpdateEvent(event);
         userRepository.save(userToUpdate);
@@ -81,4 +84,8 @@ public class UserService {
     }
 
 
+    public List<User> findAllUsers() {
+        System.out.println("db is called to get all users");
+        return userRepository.findAll();
+    }
 }

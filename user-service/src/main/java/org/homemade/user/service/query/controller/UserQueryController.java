@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -24,11 +25,18 @@ public class UserQueryController {
     }
 
 
-    @GetMapping()
+    @GetMapping("/email")
     public ResponseEntity<UserResponseDTO> getUserByEmail(@RequestParam("email") String email) {
 
        UserResponseDTO result =  userQueryService.findUserQuery(email);
 
         return ResponseEntity.ok(result);
+    }
+
+    @GetMapping()
+    public ResponseEntity<List<UserResponseDTO>> getAllUsers() {
+        List<UserResponseDTO> response = userQueryService.getAllUsers();
+
+        return ResponseEntity.ok(response);
     }
 }

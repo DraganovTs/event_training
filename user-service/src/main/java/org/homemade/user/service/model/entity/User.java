@@ -26,7 +26,6 @@ public class User {
 
 
     @Id
-    @UuidGenerator
     @Column(name = "user_id", updatable = false, nullable = false)
     private UUID userId;
 

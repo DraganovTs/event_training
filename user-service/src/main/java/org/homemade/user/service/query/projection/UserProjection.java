@@ -18,6 +18,7 @@ public class UserProjection {
 
     @EventHandler
     public void on(UserCreatedEvent event){
+        System.out.println("📢 Handling UserCreatedEvent for: " + event.getEmail());
         userService.createUser(event);
     }
 
