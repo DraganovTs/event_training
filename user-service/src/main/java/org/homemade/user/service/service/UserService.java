@@ -35,7 +35,7 @@ public class UserService {
     public void createUser(UserCreatedEvent event) {
 
         System.out.println("db try to save user: " + event.getEmail());
-        checkUserExist(event.getEmail(), event.getUsername());
+        checkUserExistByEmailAndUsername(event.getEmail(), event.getUsername());
         User userToSave = userQueryMapper.mapUserCreatedEventToUser(event);
         userRepository.save(userToSave);
 
@@ -44,7 +44,7 @@ public class UserService {
     @Transactional
     public void updateUser(UserUpdatedEvent event) {
 
-        checkUserExistById(event.getUserId());
+        checkUserExistByEmailAndUsername(event.getEmail(), event.getUsername());
         User userToUpdate = userQueryMapper.mapUserUpdateEvent(event);
         userRepository.save(userToUpdate);
     }
@@ -71,11 +71,12 @@ public class UserService {
         if (!userRepository.existsById(userId)) {
             throw new UserNotFoundException("User not found with id: " + userId);
         }
+        userRepository.deleteById(userId);
     }
 
 
     @Transactional
-    public void checkUserExist(String email, String username) {
+    public void checkUserExistByEmailAndUsername(String email, String username) {
         if (userRepository.existsByEmailAndUsername(email, username)) {
             throw new UserAlreadyExistException("User already exist whit email: " + email + " and username: " + username);
         }

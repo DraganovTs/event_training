@@ -24,6 +24,7 @@ public class UserProjection {
 
     @EventHandler
     public void on(UserUpdatedEvent event){
+        System.out.println("📢 Handling UserUpdateEvent for: " + event.getEmail());
         userService.updateUser(event);
     }
 
