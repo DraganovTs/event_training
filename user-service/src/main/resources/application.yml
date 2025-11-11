@@ -28,6 +28,10 @@ eureka:
       defaultZone: http://localhost:8070/eureka/
 
 axon:
+  eventhandling:
+    processors:
+      user-processor:
+        mode: subscribing
   axonserver:
     servers: localhost:8124
 

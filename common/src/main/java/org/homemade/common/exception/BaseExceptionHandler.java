@@ -1,5 +1,6 @@
 package org.homemade.common.exception;
 
+import org.axonframework.commandhandling.CommandExecutionException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -23,6 +24,14 @@ public abstract class BaseExceptionHandler {
                 HttpStatus.INTERNAL_SERVER_ERROR,
                 "INTERNAL_SERVER_ERROR",
                 "An unexpected error occurred");
+    }
+
+    @ExceptionHandler(CommandExecutionException.class)
+    public ResponseEntity<ErrorResponseDTO> handleGenericException(CommandExecutionException ex, WebRequest request) {
+        return buildErrorResponse(request,
+                HttpStatus.INTERNAL_SERVER_ERROR,
+                "INTERNAL_SERVER_ERROR",
+                "Command Execution error occurred");
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
