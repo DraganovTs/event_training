@@ -17,4 +17,6 @@ public interface ProductRepository extends JpaRepository<Product, UUID> {
     List<Product> findAllByOwner_OwnerId(UUID ownerOwnerId);
 
     Optional<Product> findByNameAndOwner_OwnerId(String name, UUID ownerOwnerId);
+
+    Product findByNameAndBrand(String name, String brand);
 }

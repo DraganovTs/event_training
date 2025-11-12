@@ -1,18 +1,22 @@
 package org.homemade.product.service.service;
 
+import org.homemade.common.model.dto.ProductResponseDTO;
 import org.homemade.product.service.command.event.ProductCreatedEvent;
 import org.homemade.product.service.command.event.ProductDeletedEvent;
 import org.homemade.product.service.command.event.ProductUpdatedEvent;
 import org.homemade.product.service.exception.ProductAlreadyExistsException;
 import org.homemade.product.service.exception.ProductNotFoundException;
 import org.homemade.product.service.mapper.ProductQueryMapper;
+import org.homemade.product.service.mapper.ProductServiceMapper;
 import org.homemade.product.service.model.entity.Category;
 import org.homemade.product.service.model.entity.Owner;
 import org.homemade.product.service.model.entity.Product;
+import org.homemade.product.service.query.FindProductQuery;
 import org.homemade.product.service.repository.ProductRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -22,15 +26,17 @@ public class ProductService {
     private final CategoryService categoryService;
     private final OwnerService ownerService;
     private final ProductQueryMapper productQueryMapper;
+    private final ProductServiceMapper productMapper;
 
 
     public ProductService(ProductRepository productRepository, CategoryService categoryService, OwnerService ownerService,
-                          ProductQueryMapper productQueryMapper
+                          ProductQueryMapper productQueryMapper, ProductServiceMapper productMapper
     ) {
         this.productRepository = productRepository;
         this.categoryService = categoryService;
         this.ownerService = ownerService;
         this.productQueryMapper = productQueryMapper;
+        this.productMapper = productMapper;
     }
 
     @Transactional
@@ -75,4 +81,15 @@ public class ProductService {
         }
     }
 
+    @Transactional(readOnly = true)
+    public ProductResponseDTO getProductByNameAndBrand(FindProductQuery findProductQuery) {
+        System.out.println("db try to find product: " + findProductQuery.getName() + " " + findProductQuery.getBrand());
+        Product product = productRepository.findByNameAndBrand(findProductQuery.getName(),findProductQuery.getBrand());
+        return productMapper.mapProductToProductResponse(product);
+    }
+
+    public List<Product> findAllProducts() {
+        System.out.println("db try to find all products");
+        return productRepository.findAll();
+    }
 }

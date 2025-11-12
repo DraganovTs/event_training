@@ -12,8 +12,6 @@ import org.homemade.product.service.command.event.ProductCreatedEvent;
 import org.homemade.product.service.command.event.ProductDeletedEvent;
 import org.homemade.product.service.command.event.ProductUpdatedEvent;
 import org.homemade.product.service.exception.ProductAlreadyExistsException;
-import org.homemade.product.service.model.entity.Category;
-import org.homemade.product.service.model.entity.Owner;
 import org.homemade.product.service.model.entity.Product;
 import org.homemade.product.service.repository.ProductRepository;
 import org.springframework.beans.BeanUtils;
@@ -38,6 +36,7 @@ public class ProductAggregate {
     public ProductAggregate() {
     }
 
+    @CommandHandler
     public ProductAggregate(CreateProductCommand command, ProductRepository productRepository) {
         Optional<Product> optionalProduct = productRepository.findByNameAndOwner_OwnerId(command.getName(),
                 command.getOwner());

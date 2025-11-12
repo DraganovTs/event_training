@@ -56,13 +56,15 @@ public class UserService {
         userRepository.deleteById(event.getUserId());
     }
 
+    @Transactional
     public UserResponseDTO getUserByEmail(FindUserQuery findUserQuery) {
         checkUserExistByEmail(findUserQuery.getEmail());
         User user = userRepository.findByEmail(findUserQuery.getEmail()).get();
         return userMapper.mapUserToUserResponseDTO(user);
     }
 
-    private void checkUserExistByEmail(String email) {
+    @Transactional
+    public void checkUserExistByEmail(String email) {
         userRepository.findByEmail(email).orElseThrow(() -> new UserNotFoundException("User not found with email: " + email));
     }
 
