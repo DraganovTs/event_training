@@ -32,8 +32,8 @@ public class ProductAggregate {
     private String description;
     private BigDecimal price;
     private int unitsInStock;
-    private Category category;
-    private Owner owner;
+    private UUID category;
+    private UUID owner;
 
     public ProductAggregate() {
     }
@@ -59,8 +59,8 @@ public class ProductAggregate {
         this.description = productCreatedEvent.getDescription();
         this.price = productCreatedEvent.getPrice();
         this.unitsInStock = productCreatedEvent.getUnitsInStock();
-        this.category = productCreatedEvent.getCategory();
-        this.owner = productCreatedEvent.getOwner();
+        this.category = productCreatedEvent.getCategoryId();
+        this.owner = productCreatedEvent.getOwnerId();
     }
 
     @CommandHandler

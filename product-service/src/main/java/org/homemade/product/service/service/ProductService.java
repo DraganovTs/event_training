@@ -1,15 +1,11 @@
 package org.homemade.product.service.service;
 
-import jakarta.validation.Valid;
-import org.homemade.product.service.command.CreateProductCommand;
 import org.homemade.product.service.command.event.ProductCreatedEvent;
 import org.homemade.product.service.command.event.ProductDeletedEvent;
 import org.homemade.product.service.command.event.ProductUpdatedEvent;
 import org.homemade.product.service.exception.ProductAlreadyExistsException;
 import org.homemade.product.service.exception.ProductNotFoundException;
 import org.homemade.product.service.mapper.ProductQueryMapper;
-import org.homemade.product.service.mapper.ProductServiceMapper;
-import org.homemade.product.service.model.dto.ProductRequestDTO;
 import org.homemade.common.model.dto.ProductResponseDTO;
 import org.homemade.product.service.model.entity.Category;
 import org.homemade.product.service.model.entity.Owner;
@@ -100,10 +96,6 @@ public class ProductService {
         }
     }
 
-//    public List<ProductResponseDTO> getAllProductsForUser(UUID userId) {
-//        List<Product> ownerProducts = productRepository.findAllByOwner_OwnerId(userId);
-//        return ownerProducts.stream().map(mapper::mapProductToProductResponse).toList();
-//    }
 
 
     public ProductResponseDTO getProductByNameAndBrand(FindProductQuery findProductQuery) {
