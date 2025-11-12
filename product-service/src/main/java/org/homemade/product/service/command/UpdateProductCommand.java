@@ -20,6 +20,6 @@ public class UpdateProductCommand {
     private String description;
     private BigDecimal price;
     private int unitsInStock;
-    private Category category;
-    private Owner owner;
+    private UUID category;
+    private UUID owner;
 }

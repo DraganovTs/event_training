@@ -1,7 +1,7 @@
 package org.homemade.user.service.command.controller;
 
 import jakarta.validation.Valid;
-import org.homemade.user.service.model.dto.ResponseDTO;
+import org.homemade.common.model.dto.ResponseDTO;
 import org.homemade.user.service.model.dto.UserRequestDTO;
 import org.homemade.user.service.service.UserCommandService;
 import org.springframework.http.HttpStatus;
@@ -16,11 +16,11 @@ import java.util.UUID;
 @RestController
 @RequestMapping(value = "/users", produces = MediaType.APPLICATION_JSON_VALUE)
 @Validated
-public class CustomerCommandController {
+public class UserCommandController {
 
     private final UserCommandService userCommandService;
 
-    public CustomerCommandController(UserCommandService userCommandService) {
+    public UserCommandController(UserCommandService userCommandService) {
         this.userCommandService = userCommandService;
     }
 

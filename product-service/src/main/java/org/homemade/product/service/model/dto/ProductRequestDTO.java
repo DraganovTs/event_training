@@ -14,7 +14,7 @@ import java.util.UUID;
 @NoArgsConstructor
 public class ProductRequestDTO {
 
-
+    private UUID productId;
 
     @NotBlank(message = "Product name must not be blank")
     @Size(max = 30, message = "Product name must be at most 30 characters")

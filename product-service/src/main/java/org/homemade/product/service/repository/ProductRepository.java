@@ -10,7 +10,9 @@ import java.util.UUID;
 
 @Repository
 public interface ProductRepository extends JpaRepository<Product, UUID> {
-    boolean existsByName(String name);
+
+
+    boolean existsByNameAndBrand(String name, String brand);
 
     List<Product> findAllByOwner_OwnerId(UUID ownerOwnerId);
 

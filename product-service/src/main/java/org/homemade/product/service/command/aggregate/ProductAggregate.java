@@ -40,7 +40,7 @@ public class ProductAggregate {
 
     public ProductAggregate(CreateProductCommand command, ProductRepository productRepository) {
         Optional<Product> optionalProduct = productRepository.findByNameAndOwner_OwnerId(command.getName(),
-                command.getOwner().getOwnerId());
+                command.getOwner());
 
         if (optionalProduct.isPresent()) {
             throw new ProductAlreadyExistsException("product already exist with name: " + command.getName());

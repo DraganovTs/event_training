@@ -1,13 +1,20 @@
 package org.homemade.product.service.service;
 
 import jakarta.validation.Valid;
+import org.homemade.product.service.command.CreateProductCommand;
+import org.homemade.product.service.command.event.ProductCreatedEvent;
+import org.homemade.product.service.command.event.ProductDeletedEvent;
+import org.homemade.product.service.command.event.ProductUpdatedEvent;
 import org.homemade.product.service.exception.ProductAlreadyExistsException;
+import org.homemade.product.service.exception.ProductNotFoundException;
+import org.homemade.product.service.mapper.ProductQueryMapper;
 import org.homemade.product.service.mapper.ProductServiceMapper;
 import org.homemade.product.service.model.dto.ProductRequestDTO;
 import org.homemade.common.model.dto.ProductResponseDTO;
 import org.homemade.product.service.model.entity.Category;
 import org.homemade.product.service.model.entity.Owner;
 import org.homemade.product.service.model.entity.Product;
+import org.homemade.product.service.query.FindProductQuery;
 import org.homemade.product.service.repository.ProductRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,42 +28,89 @@ public class ProductService {
     private final ProductRepository productRepository;
     private final CategoryService categoryService;
     private final OwnerService ownerService;
-    private final ProductServiceMapper mapper;
+    private final ProductQueryMapper productQueryMapper;
 
-    public ProductService(ProductRepository productRepository, CategoryService categoryService, OwnerService ownerService, ProductServiceMapper mapper) {
+
+    public ProductService(ProductRepository productRepository, CategoryService categoryService, OwnerService ownerService,
+                          ProductQueryMapper productQueryMapper
+    ) {
         this.productRepository = productRepository;
         this.categoryService = categoryService;
         this.ownerService = ownerService;
-        this.mapper = mapper;
+        this.productQueryMapper = productQueryMapper;
+    }
+
+//    @Transactional
+//    public ProductResponseDTO createProduct(CreateProductEvent event) {
+//
+//        checkProductExist(request.getName());
+//
+//        Category category = categoryService.getCategoryById(request.getCategoryId());
+//
+//        Owner owner = ownerService.getOwnerById(request.getOwnerId());
+//
+//        Product productToSave = mapper.mapProductRequestToProduct(request, category, owner);
+//
+//        Product savedProduct = productRepository.save(productToSave);
+//
+//        ProductResponseDTO responseDTO = mapper.mapProductToProductResponse(savedProduct);
+//
+//        return responseDTO;
+//    }
+
+    @Transactional
+    public void createProduct(ProductCreatedEvent event) {
+        System.out.println("db try to save product: " + event.getName());
+        checkProductExist(event.getName(), event.getBrand());
+        Category category = categoryService.getCategoryById(event.getCategoryId());
+        Owner owner = ownerService.getOwnerById(event.getOwnerId());
+        Product productToSave = productQueryMapper.mapProductCreatedEventToProduct(event, category, owner);
+        productRepository.save(productToSave);
     }
 
     @Transactional
-    public ProductResponseDTO createProduct(@Valid ProductRequestDTO request) {
+    public void updateProduct(ProductUpdatedEvent event) {
+        System.out.println("db try to update product: " + event.getName());
+        checkProductExistById(event.getProductId());
+        Category category = categoryService.getCategoryById(event.getCategoryId());
+        Owner owner = ownerService.getOwnerById(event.getOwnerId());
+        Product productToSave = productQueryMapper.mapProductUpdateEventToProduct(event, category, owner);
+        productRepository.save(productToSave);
+    }
 
-        checkProductExist(request.getName());
+    @Transactional
+    public void deleteProduct(ProductDeletedEvent event) {
+        System.out.println("db try to delete product: " + event.getProductId());
+        checkProductExistById(event.getProductId());
+        productRepository.deleteById(event.getProductId());
+    }
 
-        Category category = categoryService.getCategoryById(request.getCategoryId());
 
-        Owner owner = ownerService.getOwnerById(request.getOwnerId());
-
-        Product productToSave = mapper.mapProductRequestToProduct(request, category, owner);
-
-        Product savedProduct = productRepository.save(productToSave);
-
-        ProductResponseDTO responseDTO = mapper.mapProductToProductResponse(savedProduct);
-
-        return responseDTO;
+    @Transactional
+    public void checkProductExistById(UUID productId) {
+        if (!productRepository.existsById(productId)) {
+            throw new ProductNotFoundException("Product not found with id: " + productId);
+        }
     }
 
     @Transactional(readOnly = true)
-    public void checkProductExist(String name) {
-        if (productRepository.existsByName(name)) {
+    public void checkProductExist(String name, String brand) {
+        if (productRepository.existsByNameAndBrand(name, brand)) {
             throw new ProductAlreadyExistsException("Product already exists: " + name);
         }
     }
 
-    public List<ProductResponseDTO> getAllProductsForUser(UUID userId) {
-        List<Product> ownerProducts = productRepository.findAllByOwner_OwnerId(userId);
-        return ownerProducts.stream().map(mapper::mapProductToProductResponse).toList();
+//    public List<ProductResponseDTO> getAllProductsForUser(UUID userId) {
+//        List<Product> ownerProducts = productRepository.findAllByOwner_OwnerId(userId);
+//        return ownerProducts.stream().map(mapper::mapProductToProductResponse).toList();
+//    }
+
+
+    public ProductResponseDTO getProductByNameAndBrand(FindProductQuery findProductQuery) {
+        return null;
+    }
+
+    public List<Product> findAllProducts() {
+        return null;
     }
 }

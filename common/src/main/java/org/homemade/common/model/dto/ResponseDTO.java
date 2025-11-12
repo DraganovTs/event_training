@@ -1,4 +1,4 @@
-package org.homemade.user.service.model.dto;
+package org.homemade.common.model.dto;
 
 import lombok.Builder;
 import lombok.Data;
