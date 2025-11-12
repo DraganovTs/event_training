@@ -6,16 +6,13 @@ import org.homemade.product.service.command.event.ProductUpdatedEvent;
 import org.homemade.product.service.exception.ProductAlreadyExistsException;
 import org.homemade.product.service.exception.ProductNotFoundException;
 import org.homemade.product.service.mapper.ProductQueryMapper;
-import org.homemade.common.model.dto.ProductResponseDTO;
 import org.homemade.product.service.model.entity.Category;
 import org.homemade.product.service.model.entity.Owner;
 import org.homemade.product.service.model.entity.Product;
-import org.homemade.product.service.query.FindProductQuery;
 import org.homemade.product.service.repository.ProductRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -35,24 +32,6 @@ public class ProductService {
         this.ownerService = ownerService;
         this.productQueryMapper = productQueryMapper;
     }
-
-//    @Transactional
-//    public ProductResponseDTO createProduct(CreateProductEvent event) {
-//
-//        checkProductExist(request.getName());
-//
-//        Category category = categoryService.getCategoryById(request.getCategoryId());
-//
-//        Owner owner = ownerService.getOwnerById(request.getOwnerId());
-//
-//        Product productToSave = mapper.mapProductRequestToProduct(request, category, owner);
-//
-//        Product savedProduct = productRepository.save(productToSave);
-//
-//        ProductResponseDTO responseDTO = mapper.mapProductToProductResponse(savedProduct);
-//
-//        return responseDTO;
-//    }
 
     @Transactional
     public void createProduct(ProductCreatedEvent event) {
@@ -96,13 +75,4 @@ public class ProductService {
         }
     }
 
-
-
-    public ProductResponseDTO getProductByNameAndBrand(FindProductQuery findProductQuery) {
-        return null;
-    }
-
-    public List<Product> findAllProducts() {
-        return null;
-    }
 }
