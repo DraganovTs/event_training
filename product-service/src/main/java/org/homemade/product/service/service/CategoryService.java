@@ -32,10 +32,11 @@ public class CategoryService {
     public CategoryDTO createCategory(CategoryDTO request) {
 
         checkCategoryExist(request.getCategoryName());
-
+        System.out.println("db try to save category: " + request.getCategoryName());
         Category categoryToSave = mapper.mapCategoryDTOtoCategory(request);
         Category savedCategory = categoryRepository.save(categoryToSave);
         return mapper.mapCategoryToCategoryDTO(savedCategory);
+
     }
 
     @Transactional(readOnly = true)

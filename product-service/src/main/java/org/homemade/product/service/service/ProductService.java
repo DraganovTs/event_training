@@ -42,11 +42,17 @@ public class ProductService {
     @Transactional
     public void createProduct(ProductCreatedEvent event) {
         System.out.println("db try to save product: " + event.getName());
+        System.out.println(event.getCategoryId() + " " + event.getOwnerId());
         checkProductExist(event.getName(), event.getBrand());
         Category category = categoryService.getCategoryById(event.getCategoryId());
+        System.out.println("Fetched category: " + category);
+
         Owner owner = ownerService.getOwnerById(event.getOwnerId());
+        System.out.println("Fetched owner: " + owner);
+        System.out.println(owner.getOwnerName());
         Product productToSave = productQueryMapper.mapProductCreatedEventToProduct(event, category, owner);
         productRepository.save(productToSave);
+        System.out.println("db saved");
     }
 
     @Transactional
@@ -76,6 +82,7 @@ public class ProductService {
 
     @Transactional(readOnly = true)
     public void checkProductExist(String name, String brand) {
+        System.out.println("db try to find product: " + name + "");
         if (productRepository.existsByNameAndBrand(name, brand)) {
             throw new ProductAlreadyExistsException("Product already exists: " + name);
         }

@@ -67,6 +67,7 @@ public class ProductServiceMapper {
 
 
     public Category mapCategoryDTOtoCategory(CategoryDTO request) {
+        System.out.println("map category: " + request.getCategoryName() );
         return Category.builder()
                 .categoryName(request.getCategoryName())
                 .products(new ArrayList<>())

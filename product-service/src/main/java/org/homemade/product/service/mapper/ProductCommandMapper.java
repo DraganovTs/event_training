@@ -19,8 +19,8 @@ public class ProductCommandMapper {
                 .description(request.getDescription())
                 .price(request.getPrice())
                 .unitsInStock(request.getUnitsInStock())
-                .category(request.getCategoryId())
-                .owner(request.getOwnerId())
+                .categoryId(request.getCategoryId())
+                .ownerId(request.getOwnerId())
                 .build();
     }
 
@@ -32,8 +32,8 @@ public class ProductCommandMapper {
                 .description(request.getDescription())
                 .price(request.getPrice())
                 .unitsInStock(request.getUnitsInStock())
-                .category(request.getCategoryId())
-                .owner(request.getOwnerId())
+                .categoryId(request.getCategoryId())
+                .ownerId(request.getOwnerId())
                 .build();
     }
 }

@@ -19,6 +19,6 @@ public class CreateProductCommand {
     private String description;
     private BigDecimal price;
     private int unitsInStock;
-    private UUID category;
-    private UUID owner;
+    private UUID categoryId;
+    private UUID ownerId;
 }

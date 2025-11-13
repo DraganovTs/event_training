@@ -39,7 +39,7 @@ public class ProductAggregate {
     @CommandHandler
     public ProductAggregate(CreateProductCommand command, ProductRepository productRepository) {
         Optional<Product> optionalProduct = productRepository.findByNameAndOwner_OwnerId(command.getName(),
-                command.getOwner());
+                command.getOwnerId());
 
         if (optionalProduct.isPresent()) {
             throw new ProductAlreadyExistsException("product already exist with name: " + command.getName());
@@ -47,6 +47,8 @@ public class ProductAggregate {
 
         ProductCreatedEvent productCreatedEvent = new ProductCreatedEvent();
         BeanUtils.copyProperties(command, productCreatedEvent);
+        System.out.println(command.toString());
+        System.out.println(productCreatedEvent.toString());
         AggregateLifecycle.apply(productCreatedEvent);
     }
 

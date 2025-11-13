@@ -10,6 +10,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class ProductQueryMapper {
     public Product mapProductCreatedEventToProduct(ProductCreatedEvent event, Category category, Owner owner) {
+        System.out.println("mapper try to save product: " + event.getName());
         return Product.builder()
                 .productId(event.getProductId())
                 .name(event.getName())

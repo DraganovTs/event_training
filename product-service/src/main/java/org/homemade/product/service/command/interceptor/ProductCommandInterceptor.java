@@ -40,32 +40,32 @@ public class ProductCommandInterceptor implements MessageDispatchInterceptor<Com
             if (CreateProductCommand.class.equals(commandMessage.getPayloadType())) {
                 CreateProductCommand command = (CreateProductCommand) commandMessage.getPayload();
                 Optional<Product> optionalProduct = productRepository.findByNameAndOwner_OwnerId(command.getName(),
-                        command.getOwner());
+                        command.getOwnerId());
                 if (optionalProduct.isPresent()) {
                     throw new org.homemade.product.service.exception.ProductAlreadyExistsException("product already exist with name: " + command.getName());
                 }
-                Optional<Category> optionalCategory = categoryRepository.findById(command.getCategory());
+                Optional<Category> optionalCategory = categoryRepository.findById(command.getCategoryId());
                 if (optionalCategory.isEmpty()) {
-                    throw new CategoryNotFoundException("category not found with id: " + command.getCategory());
+                    throw new CategoryNotFoundException("category not found with id: " + command.getCategoryId());
                 }
-                Optional<org.homemade.product.service.model.entity.Owner> optionalOwner = ownerRepository.findById(command.getOwner());
+                Optional<org.homemade.product.service.model.entity.Owner> optionalOwner = ownerRepository.findById(command.getOwnerId());
                 if (optionalOwner.isEmpty()) {
-                    throw new OwnerNotFoundException("owner not found with id: " + command.getOwner());
+                    throw new OwnerNotFoundException("owner not found with id: " + command.getOwnerId());
                 }
             } else if (commandMessage.getPayloadType().equals(UpdateProductCommand.class)) {
                 UpdateProductCommand command = (UpdateProductCommand) commandMessage.getPayload();
                 Optional<Product> optionalProduct = productRepository.findByNameAndOwner_OwnerId(command.getName(),
-                        command.getOwner());
+                        command.getOwnerId());
                 if (optionalProduct.isEmpty()) {
                     throw new org.homemade.product.service.exception.ProductNotFoundException("product not found with name: " + command.getName());
                 }
-                Optional<Category> optionalCategory = categoryRepository.findById(command.getCategory());
+                Optional<Category> optionalCategory = categoryRepository.findById(command.getCategoryId());
                 if (optionalCategory.isEmpty()) {
-                    throw new CategoryNotFoundException("category not found with id: " + command.getCategory());
+                    throw new CategoryNotFoundException("category not found with id: " + command.getCategoryId());
                 }
-                Optional<Owner> optionalOwner = ownerRepository.findById(command.getOwner());
+                Optional<Owner> optionalOwner = ownerRepository.findById(command.getOwnerId());
                 if (optionalOwner.isEmpty()) {
-                    throw new OwnerNotFoundException("owner not found with id: " + command.getOwner());
+                    throw new OwnerNotFoundException("owner not found with id: " + command.getOwnerId());
                 }
             } else if (commandMessage.getPayloadType().equals(DeleteProductCommand.class)) {
                 DeleteProductCommand command = (DeleteProductCommand) commandMessage.getPayload();
