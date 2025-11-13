@@ -20,7 +20,7 @@ public class ProductQueryHandler {
     }
 
     @QueryHandler
-    public ProductResponseDTO findProduct(FindProductQuery findProductQuery) {
+    public Product findProduct(FindProductQuery findProductQuery) {
         return productService.getProductByNameAndBrand(findProductQuery);
     }
 

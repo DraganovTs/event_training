@@ -89,10 +89,10 @@ public class ProductService {
     }
 
     @Transactional(readOnly = true)
-    public ProductResponseDTO getProductByNameAndBrand(FindProductQuery findProductQuery) {
+    public Product getProductByNameAndBrand(FindProductQuery findProductQuery) {
         System.out.println("db try to find product: " + findProductQuery.getName() + " " + findProductQuery.getBrand());
         Product product = productRepository.findByNameAndBrand(findProductQuery.getName(),findProductQuery.getBrand());
-        return productMapper.mapProductToProductResponse(product);
+        return product;
     }
 
     public List<Product> findAllProducts() {

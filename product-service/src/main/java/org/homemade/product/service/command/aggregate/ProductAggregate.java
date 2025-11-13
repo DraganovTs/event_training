@@ -74,6 +74,13 @@ public class ProductAggregate {
     @EventSourcingHandler
     public void on(ProductUpdatedEvent productUpdatedEvent) {
        this.productId = productUpdatedEvent.getProductId();
+       this.name = productUpdatedEvent.getName();
+       this.brand = productUpdatedEvent.getBrand();
+       this.description = productUpdatedEvent.getDescription();
+       this.price = productUpdatedEvent.getPrice();
+       this.unitsInStock = productUpdatedEvent.getUnitsInStock();
+       this.category = productUpdatedEvent.getCategoryId();
+       this.owner = productUpdatedEvent.getOwnerId();
     }
 
     @CommandHandler

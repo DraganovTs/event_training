@@ -24,7 +24,8 @@ public class ProductQueryService {
 
     public ProductResponseDTO findUserQuery(String name, String brand) {
         FindProductQuery findProductQuery = new FindProductQuery(name, brand);
-        return queryGateway.query(findProductQuery, ResponseTypes.instanceOf(ProductResponseDTO.class)).join();
+        return productMapper
+                .mapProductToProductResponse(queryGateway.query(findProductQuery, ResponseTypes.instanceOf(Product.class)).join());
     }
 
     public List<ProductResponseDTO> getAllProducts() {
