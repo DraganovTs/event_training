@@ -47,8 +47,6 @@ public class ProductAggregate {
 
         ProductCreatedEvent productCreatedEvent = new ProductCreatedEvent();
         BeanUtils.copyProperties(command, productCreatedEvent);
-        System.out.println(command.toString());
-        System.out.println(productCreatedEvent.toString());
         AggregateLifecycle.apply(productCreatedEvent);
     }
 
