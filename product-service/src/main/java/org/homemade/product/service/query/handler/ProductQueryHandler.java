@@ -1,7 +1,6 @@
 package org.homemade.product.service.query.handler;
 
 import org.axonframework.queryhandling.QueryHandler;
-import org.homemade.common.model.dto.ProductResponseDTO;
 import org.homemade.product.service.model.entity.Product;
 import org.homemade.product.service.query.FindAllProductsQuery;
 import org.homemade.product.service.query.FindProductQuery;
