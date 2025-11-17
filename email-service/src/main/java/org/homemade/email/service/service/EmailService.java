@@ -1,6 +1,6 @@
 package org.homemade.email.service.service;
 
-import jakarta.transaction.Transactional;
+import org.springframework.transaction.annotation.Transactional;
 import org.homemade.email.service.command.event.EmailMessageCreatedEvent;
 import org.homemade.email.service.command.event.EmailMessageDeletedEvent;
 import org.homemade.email.service.command.event.EmailMessageUpdatedEvent;
@@ -37,8 +37,6 @@ public class EmailService {
     }
 
 
-
-
     @Transactional
     public void updateEmailMessage(EmailMessageUpdatedEvent event) {
         System.out.println("db try to update email: " + event.getMessageId());
@@ -57,22 +55,27 @@ public class EmailService {
     }
 
     public EmailMessage getEmailMessageByRecipientAndSubject(FindEmailMessageQuery findEmailMessageQuery) {
-        return null;
+        System.out.println("db try to find email: " + findEmailMessageQuery.getRecipient() + " " + findEmailMessageQuery.getSubject());
+        return emailMessageRepository.findByRecipientAndSubject(findEmailMessageQuery.getRecipient(), findEmailMessageQuery.getSubject())
+                .orElseThrow(() -> new EmailMessageNotFoundException("Email not found with recipient: "
+                        + findEmailMessageQuery.getRecipient() + " and subject: "
+                        + findEmailMessageQuery.getSubject()));
     }
 
     public List<EmailMessage> findAllEmails(FindAllEmailMessages findAllEmailMessages) {
-        return null;
+        System.out.println("db try to find all emails");
+        return emailMessageRepository.findAll();
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     public void checkEmailMessageExistBySubjectAndRecipient(String subject, String recipient) {
         System.out.println("db try to check email: " + subject + " " + recipient);
-        if (emailMessageRepository.findByRecipientAndSubject(recipient,subject).isPresent()) {
+        if (emailMessageRepository.findByRecipientAndSubject(recipient, subject).isPresent()) {
             throw new EmailMessageAlreadyExist("Email for recipient: " + recipient + " and subject: " + subject + " already exist");
         }
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     public void checkEmailMessageExistById(UUID messageId) {
         if (emailMessageRepository.findById(messageId).isEmpty()) {
             throw new EmailMessageNotFoundException("Email not found with id: " + messageId);

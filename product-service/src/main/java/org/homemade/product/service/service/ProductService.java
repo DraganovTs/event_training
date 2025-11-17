@@ -1,13 +1,11 @@
 package org.homemade.product.service.service;
 
-import org.homemade.common.model.dto.ProductResponseDTO;
 import org.homemade.product.service.command.event.ProductCreatedEvent;
 import org.homemade.product.service.command.event.ProductDeletedEvent;
 import org.homemade.product.service.command.event.ProductUpdatedEvent;
 import org.homemade.product.service.exception.ProductAlreadyExistsException;
 import org.homemade.product.service.exception.ProductNotFoundException;
 import org.homemade.product.service.mapper.ProductQueryMapper;
-import org.homemade.product.service.mapper.ProductServiceMapper;
 import org.homemade.product.service.model.entity.Category;
 import org.homemade.product.service.model.entity.Owner;
 import org.homemade.product.service.model.entity.Product;
@@ -81,17 +79,17 @@ public class ProductService {
 
     @Transactional(readOnly = true)
     public void checkProductExist(String name, String brand) {
-        System.out.println("db try to find product: " + name + "");
+        System.out.println("db try to find product: " + name );
         if (productRepository.existsByNameAndBrand(name, brand)) {
             throw new ProductAlreadyExistsException("Product already exists: " + name);
         }
     }
 
-    @Transactional(readOnly = true)
+    @Transactional()
     public Product getProductByNameAndBrand(FindProductQuery findProductQuery) {
         System.out.println("db try to find product: " + findProductQuery.getName() + " " + findProductQuery.getBrand());
-        Product product = productRepository.findByNameAndBrand(findProductQuery.getName(),findProductQuery.getBrand());
-        return product;
+        return productRepository.findByNameAndBrand(findProductQuery.getName(),findProductQuery.getBrand());
+
     }
 
     public List<Product> findAllProducts() {
