@@ -26,17 +26,16 @@ public class ProductService {
     private final CategoryService categoryService;
     private final OwnerService ownerService;
     private final ProductQueryMapper productQueryMapper;
-    private final ProductServiceMapper productMapper;
 
 
     public ProductService(ProductRepository productRepository, CategoryService categoryService, OwnerService ownerService,
-                          ProductQueryMapper productQueryMapper, ProductServiceMapper productMapper
+                          ProductQueryMapper productQueryMapper
     ) {
         this.productRepository = productRepository;
         this.categoryService = categoryService;
         this.ownerService = ownerService;
         this.productQueryMapper = productQueryMapper;
-        this.productMapper = productMapper;
+
     }
 
     @Transactional

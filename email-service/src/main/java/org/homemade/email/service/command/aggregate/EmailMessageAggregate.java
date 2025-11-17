@@ -13,7 +13,7 @@ import org.homemade.email.service.command.event.EmailMessageDeletedEvent;
 import org.homemade.email.service.command.event.EmailMessageUpdatedEvent;
 import org.homemade.email.service.exception.EmailMessageAlreadyExist;
 import org.homemade.email.service.model.entity.EmailMessage;
-import org.homemade.email.service.repository.EmailRepository;
+import org.homemade.email.service.repository.EmailMessageRepository;
 import org.springframework.beans.BeanUtils;
 
 import java.util.Optional;
@@ -33,8 +33,8 @@ public class EmailMessageAggregate {
     }
 
     @CommandHandler
-    public EmailMessageAggregate(CreateEmailMessageCommand command, EmailRepository emailRepository) {
-        Optional<EmailMessage> optionalEmailMessage = emailRepository.findByRecipientAndSubject(
+    public EmailMessageAggregate(CreateEmailMessageCommand command, EmailMessageRepository emailMessageRepository) {
+        Optional<EmailMessage> optionalEmailMessage = emailMessageRepository.findByRecipientAndSubject(
                 command.getRecipient(), command.getSubject());
 
         if (optionalEmailMessage.isPresent()) {

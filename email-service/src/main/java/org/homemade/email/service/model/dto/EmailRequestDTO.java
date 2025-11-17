@@ -3,9 +3,13 @@ package org.homemade.email.service.model.dto;
 
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import lombok.Builder;
+import lombok.Data;
 
 import java.util.UUID;
 
+@Data
+@Builder
 public class EmailRequestDTO {
 
     private UUID id;
@@ -18,5 +22,7 @@ public class EmailRequestDTO {
     @NotNull(message = "Body must not be null")
     @Size(max = 1000, message = "Body must be at most 1000 characters")
     private String body;
+    @NotNull(message = "Email user id must not be null")
+    private UUID emailUserId;
 
 }

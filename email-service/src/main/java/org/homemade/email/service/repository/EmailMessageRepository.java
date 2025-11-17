@@ -8,7 +8,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Repository
-public interface EmailRepository extends JpaRepository<EmailMessage, UUID> {
+public interface EmailMessageRepository extends JpaRepository<EmailMessage, UUID> {
 
     Optional<EmailMessage> findByRecipientAndSubject(String recipient, String subject);
 }
