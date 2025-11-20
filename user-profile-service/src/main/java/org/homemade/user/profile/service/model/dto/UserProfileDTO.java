@@ -9,6 +9,7 @@ import java.util.List;
 @Data
 @Builder
 public class UserProfileDTO {
+    private String userId;
     private String username;
     private String email;
     private String firstName;
