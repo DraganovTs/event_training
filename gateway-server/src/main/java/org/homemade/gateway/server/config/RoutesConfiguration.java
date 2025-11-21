@@ -9,7 +9,7 @@ import org.springframework.context.annotation.Configuration;
 public class RoutesConfiguration {
 
     @Bean
-    public RouteLocator eventTrainingRouteConfig(RouteLocatorBuilder routeLocatorBuilder){
+    public RouteLocator eventTrainingRouteConfig(RouteLocatorBuilder routeLocatorBuilder) {
         return routeLocatorBuilder.routes()
                 .route("product-service", r -> r.path("/products/**")
                         .uri("lb://PRODUCT-SERVICE"))
@@ -21,6 +21,8 @@ public class RoutesConfiguration {
                         .uri("lb://USER-SERVICE"))
                 .route("email-service", r -> r.path("/emails/**")
                         .uri("lb://EMAIL-SERVICE"))
+                .route("user-profile-service", r -> r.path("/userProfile/**")
+                        .uri("lb://USER-PROFILE-SERVICE"))
                 .build();
     }
 }

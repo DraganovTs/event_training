@@ -5,18 +5,16 @@ import org.axonframework.eventsourcing.EventSourcingHandler;
 import org.axonframework.modelling.command.AggregateIdentifier;
 import org.axonframework.modelling.command.AggregateLifecycle;
 import org.axonframework.spring.stereotype.Aggregate;
+import org.homemade.common.event.EmailDataChangedEvent;
 import org.homemade.email.service.command.CreateEmailMessageCommand;
 import org.homemade.email.service.command.DeleteEmailMessageCommand;
 import org.homemade.email.service.command.UpdateEmailMessageCommand;
 import org.homemade.email.service.command.event.EmailMessageCreatedEvent;
 import org.homemade.email.service.command.event.EmailMessageDeletedEvent;
 import org.homemade.email.service.command.event.EmailMessageUpdatedEvent;
-import org.homemade.email.service.exception.EmailMessageAlreadyExist;
-import org.homemade.email.service.model.entity.EmailMessage;
 import org.homemade.email.service.repository.EmailMessageRepository;
 import org.springframework.beans.BeanUtils;
 
-import java.util.Optional;
 import java.util.UUID;
 
 @Aggregate
@@ -53,7 +51,11 @@ public class EmailMessageAggregate {
     public void handle(UpdateEmailMessageCommand updateEmailMessageCommand) {
         EmailMessageUpdatedEvent emailMessageUpdatedEvent = new EmailMessageUpdatedEvent();
         BeanUtils.copyProperties(updateEmailMessageCommand, emailMessageUpdatedEvent);
-        AggregateLifecycle.apply(emailMessageUpdatedEvent);
+        EmailDataChangedEvent emailDataChangedEvent = new EmailDataChangedEvent();
+        BeanUtils.copyProperties(updateEmailMessageCommand, emailDataChangedEvent);
+        AggregateLifecycle.apply(emailMessageUpdatedEvent).andThen(
+                () -> AggregateLifecycle.apply(emailDataChangedEvent)
+        );
     }
 
     @EventSourcingHandler
@@ -69,7 +71,11 @@ public class EmailMessageAggregate {
     public void handle(DeleteEmailMessageCommand deleteEmailMessageCommand) {
         EmailMessageDeletedEvent emailMessageDeletedEvent = new EmailMessageDeletedEvent();
         BeanUtils.copyProperties(deleteEmailMessageCommand, emailMessageDeletedEvent);
-        AggregateLifecycle.apply(emailMessageDeletedEvent);
+        EmailDataChangedEvent emailDataChangedEvent = new EmailDataChangedEvent();
+        BeanUtils.copyProperties(deleteEmailMessageCommand, emailDataChangedEvent);
+        AggregateLifecycle.apply(emailMessageDeletedEvent).andThen(
+                () -> AggregateLifecycle.apply(emailDataChangedEvent)
+        );
     }
 
     @EventSourcingHandler
