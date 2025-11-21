@@ -8,18 +8,16 @@ import org.axonframework.spring.stereotype.Aggregate;
 import org.homemade.user.service.command.CreateUserCommand;
 import org.homemade.user.service.command.DeleteUserCommand;
 import org.homemade.user.service.command.UpdateUserCommand;
+import org.homemade.common.event.UserDataChangedEvent;
 import org.homemade.user.service.command.event.UserCreatedEvent;
 import org.homemade.user.service.command.event.UserDeletedEvent;
 import org.homemade.user.service.command.event.UserUpdatedEvent;
-import org.homemade.user.service.exception.UserAlreadyExistException;
 import org.homemade.user.service.model.entity.Address;
-import org.homemade.user.service.model.entity.User;
 import org.homemade.user.service.model.enums.AccountStatus;
 import org.homemade.user.service.repository.UserRepository;
 import org.springframework.beans.BeanUtils;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 @Aggregate
@@ -41,16 +39,13 @@ public class UserAggregate {
 
     @CommandHandler
     public UserAggregate(CreateUserCommand command, UserRepository userRepository) {
-        Optional<User> optionalUser = userRepository.findByEmail(command.getEmail());
-        if (optionalUser.isPresent()) {
-            throw new UserAlreadyExistException("user already exist with email: " + command.getEmail());
-        }
 
         UserCreatedEvent userCreatedEvent = new UserCreatedEvent();
         BeanUtils.copyProperties(command, userCreatedEvent);
-        AggregateLifecycle.apply(userCreatedEvent);
-
-
+        UserDataChangedEvent userDataChangedEvent = new UserDataChangedEvent();
+        BeanUtils.copyProperties(command, userDataChangedEvent);
+        AggregateLifecycle.apply(userCreatedEvent).andThen(
+                () -> AggregateLifecycle.apply(userDataChangedEvent));
     }
 
     @EventSourcingHandler
@@ -67,10 +62,13 @@ public class UserAggregate {
     }
 
     @CommandHandler
-    public void handle(UpdateUserCommand updateUserCommand) {
+    public void handle(UpdateUserCommand command) {
         UserUpdatedEvent userUpdatedEvent = new UserUpdatedEvent();
-        BeanUtils.copyProperties(updateUserCommand, userUpdatedEvent);
-        AggregateLifecycle.apply(userUpdatedEvent);
+        BeanUtils.copyProperties(command, userUpdatedEvent);
+        UserDataChangedEvent userDataChangedEvent = new UserDataChangedEvent();
+        BeanUtils.copyProperties(command, userDataChangedEvent);
+        AggregateLifecycle.apply(userUpdatedEvent).andThen(
+                () -> AggregateLifecycle.apply(userDataChangedEvent));
     }
 
     @EventSourcingHandler

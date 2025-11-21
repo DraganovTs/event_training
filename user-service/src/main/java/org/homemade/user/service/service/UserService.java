@@ -1,6 +1,7 @@
 package org.homemade.user.service.service;
 
 import jakarta.transaction.Transactional;
+import org.axonframework.eventhandling.gateway.EventGateway;
 import org.homemade.common.model.dto.UserResponseDTO;
 import org.homemade.user.service.command.event.UserCreatedEvent;
 import org.homemade.user.service.command.event.UserDeletedEvent;
@@ -23,12 +24,14 @@ public class UserService {
     private final UserRepository userRepository;
     private final UserQueryMapper userQueryMapper;
     private final UserMapper userMapper;
+    private final EventGateway eventGateway;
 
 
-    public UserService(UserRepository userRepository, UserQueryMapper userQueryMapper, UserMapper userMapper) {
+    public UserService(UserRepository userRepository, UserQueryMapper userQueryMapper, UserMapper userMapper, EventGateway eventGateway) {
         this.userRepository = userRepository;
         this.userQueryMapper = userQueryMapper;
         this.userMapper = userMapper;
+        this.eventGateway = eventGateway;
     }
 
     @Transactional
