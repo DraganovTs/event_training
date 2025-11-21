@@ -24,14 +24,13 @@ public class UserService {
     private final UserRepository userRepository;
     private final UserQueryMapper userQueryMapper;
     private final UserMapper userMapper;
-    private final EventGateway eventGateway;
 
 
-    public UserService(UserRepository userRepository, UserQueryMapper userQueryMapper, UserMapper userMapper, EventGateway eventGateway) {
+    public UserService(UserRepository userRepository, UserQueryMapper userQueryMapper, UserMapper userMapper) {
         this.userRepository = userRepository;
         this.userQueryMapper = userQueryMapper;
         this.userMapper = userMapper;
-        this.eventGateway = eventGateway;
+
     }
 
     @Transactional
@@ -76,7 +75,6 @@ public class UserService {
         if (!userRepository.existsById(userId)) {
             throw new UserNotFoundException("User not found with id: " + userId);
         }
-        userRepository.deleteById(userId);
     }
 
 

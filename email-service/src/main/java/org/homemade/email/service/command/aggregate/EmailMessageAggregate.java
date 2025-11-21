@@ -34,14 +34,6 @@ public class EmailMessageAggregate {
 
     @CommandHandler
     public EmailMessageAggregate(CreateEmailMessageCommand command, EmailMessageRepository emailMessageRepository) {
-        Optional<EmailMessage> optionalEmailMessage = emailMessageRepository.findByRecipientAndSubject(
-                command.getRecipient(), command.getSubject());
-
-        if (optionalEmailMessage.isPresent()) {
-            throw new EmailMessageAlreadyExist("Email for recipient: " + command.getRecipient() + " and subject: "
-                    + command.getSubject() + " already exist");
-        }
-
         EmailMessageCreatedEvent emailMessageCreatedEvent = new EmailMessageCreatedEvent();
         BeanUtils.copyProperties(command, emailMessageCreatedEvent);
         AggregateLifecycle.apply(emailMessageCreatedEvent);

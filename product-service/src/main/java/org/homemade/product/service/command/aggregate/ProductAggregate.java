@@ -5,6 +5,7 @@ import org.axonframework.eventsourcing.EventSourcingHandler;
 import org.axonframework.modelling.command.AggregateIdentifier;
 import org.axonframework.modelling.command.AggregateLifecycle;
 import org.axonframework.spring.stereotype.Aggregate;
+import org.homemade.common.event.ProductDataChangedEvent;
 import org.homemade.product.service.command.CreateProductCommand;
 import org.homemade.product.service.command.DeleteProductCommand;
 import org.homemade.product.service.command.UpdateProductCommand;
@@ -38,16 +39,13 @@ public class ProductAggregate {
 
     @CommandHandler
     public ProductAggregate(CreateProductCommand command, ProductRepository productRepository) {
-        Optional<Product> optionalProduct = productRepository.findByNameAndOwner_OwnerId(command.getName(),
-                command.getOwnerId());
-
-        if (optionalProduct.isPresent()) {
-            throw new ProductAlreadyExistsException("product already exist with name: " + command.getName());
-        }
-
         ProductCreatedEvent productCreatedEvent = new ProductCreatedEvent();
         BeanUtils.copyProperties(command, productCreatedEvent);
-        AggregateLifecycle.apply(productCreatedEvent);
+        ProductDataChangedEvent productDataChangedEvent = new ProductDataChangedEvent();
+        BeanUtils.copyProperties(command, productDataChangedEvent);
+        AggregateLifecycle.apply(productCreatedEvent).andThen(
+                () -> AggregateLifecycle.apply(productDataChangedEvent)
+        );
     }
 
     @EventSourcingHandler
@@ -63,26 +61,30 @@ public class ProductAggregate {
     }
 
     @CommandHandler
-    public void handle(UpdateProductCommand updateProductCommand){
+    public void handle(UpdateProductCommand command) {
         ProductUpdatedEvent productUpdatedEvent = new ProductUpdatedEvent();
-        BeanUtils.copyProperties(updateProductCommand, productUpdatedEvent);
-        AggregateLifecycle.apply(productUpdatedEvent);
+        BeanUtils.copyProperties(command, productUpdatedEvent);
+        ProductDataChangedEvent productDataChangedEvent = new ProductDataChangedEvent();
+        BeanUtils.copyProperties(command, productDataChangedEvent);
+        AggregateLifecycle.apply(productUpdatedEvent).andThen(
+                () -> AggregateLifecycle.apply(productDataChangedEvent)
+        );
     }
 
     @EventSourcingHandler
     public void on(ProductUpdatedEvent productUpdatedEvent) {
-       this.productId = productUpdatedEvent.getProductId();
-       this.name = productUpdatedEvent.getName();
-       this.brand = productUpdatedEvent.getBrand();
-       this.description = productUpdatedEvent.getDescription();
-       this.price = productUpdatedEvent.getPrice();
-       this.unitsInStock = productUpdatedEvent.getUnitsInStock();
-       this.category = productUpdatedEvent.getCategoryId();
-       this.owner = productUpdatedEvent.getOwnerId();
+        this.productId = productUpdatedEvent.getProductId();
+        this.name = productUpdatedEvent.getName();
+        this.brand = productUpdatedEvent.getBrand();
+        this.description = productUpdatedEvent.getDescription();
+        this.price = productUpdatedEvent.getPrice();
+        this.unitsInStock = productUpdatedEvent.getUnitsInStock();
+        this.category = productUpdatedEvent.getCategoryId();
+        this.owner = productUpdatedEvent.getOwnerId();
     }
 
     @CommandHandler
-    public void handle(DeleteProductCommand deleteProductCommand){
+    public void handle(DeleteProductCommand deleteProductCommand) {
         ProductDeletedEvent productDeletedEvent = new ProductDeletedEvent();
         BeanUtils.copyProperties(deleteProductCommand, productDeletedEvent);
         AggregateLifecycle.apply(productDeletedEvent);
