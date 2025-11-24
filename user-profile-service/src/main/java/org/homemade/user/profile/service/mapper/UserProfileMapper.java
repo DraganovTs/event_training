@@ -17,7 +17,7 @@ import java.util.stream.Collectors;
 public class UserProfileMapper {
 
     public UserProfile mapUserDataChangedEventToUserProfile(UserProfile userProfile, UserDataChangedEvent event) {
-        if (userProfile.getEmail().isEmpty()) {
+        if (userProfile.getEmail() == null || userProfile.getEmail().isEmpty()) {
             return mapToNewProfile(userProfile, event);
         } else {
             return mapToExistingProfile(userProfile, event);
@@ -34,8 +34,8 @@ public class UserProfileMapper {
 
     private UserProfile mapToNewProfile(UserProfile userProfile, UserDataChangedEvent event) {
         return UserProfile.builder()
-                .userId(userProfile.getUserId())
-                .username(userProfile.getUsername())
+                .userId(event.getUserId())
+                .username(event.getUsername())
                 .email(event.getEmail())
                 .firstName(event.getFirstName())
                 .lastName(event.getLastName())

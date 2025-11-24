@@ -14,7 +14,6 @@ import org.homemade.user.service.command.event.UserDeletedEvent;
 import org.homemade.user.service.command.event.UserUpdatedEvent;
 import org.homemade.user.service.model.entity.Address;
 import org.homemade.user.service.model.enums.AccountStatus;
-import org.homemade.user.service.repository.UserRepository;
 import org.springframework.beans.BeanUtils;
 
 import java.util.List;
@@ -38,14 +37,15 @@ public class UserAggregate {
     }
 
     @CommandHandler
-    public UserAggregate(CreateUserCommand command, UserRepository userRepository) {
+    public UserAggregate(CreateUserCommand command) {
 
         UserCreatedEvent userCreatedEvent = new UserCreatedEvent();
         BeanUtils.copyProperties(command, userCreatedEvent);
         UserDataChangedEvent userDataChangedEvent = new UserDataChangedEvent();
         BeanUtils.copyProperties(command, userDataChangedEvent);
         AggregateLifecycle.apply(userCreatedEvent).andThen(
-                () -> AggregateLifecycle.apply(userDataChangedEvent));
+                () -> AggregateLifecycle.apply(userDataChangedEvent)
+        );
     }
 
     @EventSourcingHandler

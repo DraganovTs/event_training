@@ -6,6 +6,7 @@ import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 
 import java.util.List;
+import java.util.UUID;
 
 @Entity
 @Table(name = "user_profile")
@@ -17,7 +18,7 @@ import java.util.List;
 public class UserProfile {
     @Id
     @Column(name = "user_profile_id")
-    private String userId;
+    private UUID userId;
     @NotBlank(message = "Username is required")
     @Column(name = "username", nullable = false, unique = true)
     private String username;

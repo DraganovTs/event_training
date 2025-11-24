@@ -18,6 +18,8 @@ public class UserProfileProjection {
 
     @EventHandler
     public void on(UserDataChangedEvent event){
+        System.out.println("Handling UserDataChangedEvent for: " + event.getEmail());
+        System.out.println(event.toString());
         userProfileService.handleUserDataChangedEvent(event);
     }
 }
