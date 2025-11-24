@@ -31,6 +31,6 @@ public class EmailUser {
     @Size(max = 30, message = "Owner email must be at most 30 characters")
     @Column(name = "owner_email")
     private String ownerEmail;
-    @OneToMany(mappedBy = "email_message_id", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "emailUser", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<EmailMessage> emails;
 }
