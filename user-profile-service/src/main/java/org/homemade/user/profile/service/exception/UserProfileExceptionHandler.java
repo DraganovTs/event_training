@@ -15,4 +15,9 @@ public class UserProfileExceptionHandler extends BaseExceptionHandler {
     public ResponseEntity<ErrorResponseDTO> handleUserProfileNotExist(UserProfileNotExist exception, WebRequest request) {
         return buildErrorResponse(exception, request, HttpStatus.NOT_FOUND, "USER_PROFILE_NOT_FOUND");
     }
+
+    @ExceptionHandler(value = {UserProfileAlreadyExist.class})
+    public ResponseEntity<ErrorResponseDTO> handleUserProfileAlreadyExist(UserProfileAlreadyExist exception, WebRequest request) {
+        return buildErrorResponse(exception, request, HttpStatus.CONFLICT, "USER_PROFILE_ALREADY_EXIST");
+    }
 }

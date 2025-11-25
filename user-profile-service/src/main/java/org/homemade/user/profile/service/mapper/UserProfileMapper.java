@@ -1,6 +1,7 @@
 package org.homemade.user.profile.service.mapper;
 
 import org.homemade.common.event.UserDataChangedEvent;
+import org.homemade.common.event.UserDataCreatedEvent;
 import org.homemade.user.profile.service.model.dto.EmailsInfoDTO;
 import org.homemade.user.profile.service.model.dto.ProductInfoDTO;
 import org.homemade.user.profile.service.model.dto.UserProfileDTO;
@@ -16,23 +17,7 @@ import java.util.stream.Collectors;
 @Component
 public class UserProfileMapper {
 
-    public UserProfile mapUserDataChangedEventToUserProfile(UserProfile userProfile, UserDataChangedEvent event) {
-        if (userProfile.getEmail() == null || userProfile.getEmail().isEmpty()) {
-            return mapToNewProfile(userProfile, event);
-        } else {
-            return mapToExistingProfile(userProfile, event);
-        }
-    }
-
-    private UserProfile mapToExistingProfile(UserProfile userProfile, UserDataChangedEvent event) {
-        userProfile.setEmail(event.getEmail());
-        userProfile.setFirstName(event.getFirstName());
-        userProfile.setLastName(event.getLastName());
-        userProfile.setPhone(event.getPhone());
-        return userProfile;
-    }
-
-    private UserProfile mapToNewProfile(UserProfile userProfile, UserDataChangedEvent event) {
+    public UserProfile mapUserDataCreatedEventToUserProfile(UserDataCreatedEvent event) {
         return UserProfile.builder()
                 .userId(event.getUserId())
                 .username(event.getUsername())
@@ -44,6 +29,15 @@ public class UserProfileMapper {
                 .emails(new ArrayList<>())
                 .build();
     }
+
+    public void mapUserDataChangedEventToUserProfile(UserProfile userProfileToSave, UserDataChangedEvent event) {
+        userProfileToSave.setUsername(event.getUsername());
+        userProfileToSave.setFirstName(event.getFirstName());
+        userProfileToSave.setLastName(event.getLastName());
+        userProfileToSave.setPhone(event.getPhone());
+        userProfileToSave.setEmail(event.getEmail());
+    }
+
 
     public UserProfileDTO mapUserProfileToUserProfileDTO(UserProfile userProfile) {
         return UserProfileDTO.builder()
@@ -81,4 +75,6 @@ public class UserProfileMapper {
                         .build())
                 .collect(Collectors.toList());
     }
+
+
 }

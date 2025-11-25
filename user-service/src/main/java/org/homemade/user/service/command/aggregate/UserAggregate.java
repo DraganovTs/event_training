@@ -5,6 +5,7 @@ import org.axonframework.eventsourcing.EventSourcingHandler;
 import org.axonframework.modelling.command.AggregateIdentifier;
 import org.axonframework.modelling.command.AggregateLifecycle;
 import org.axonframework.spring.stereotype.Aggregate;
+import org.homemade.common.event.UserDataCreatedEvent;
 import org.homemade.user.service.command.CreateUserCommand;
 import org.homemade.user.service.command.DeleteUserCommand;
 import org.homemade.user.service.command.UpdateUserCommand;
@@ -41,10 +42,10 @@ public class UserAggregate {
 
         UserCreatedEvent userCreatedEvent = new UserCreatedEvent();
         BeanUtils.copyProperties(command, userCreatedEvent);
-        UserDataChangedEvent userDataChangedEvent = new UserDataChangedEvent();
-        BeanUtils.copyProperties(command, userDataChangedEvent);
+        UserDataCreatedEvent userDataCreatedEvent = new UserDataCreatedEvent();
+        BeanUtils.copyProperties(command, userDataCreatedEvent);
         AggregateLifecycle.apply(userCreatedEvent).andThen(
-                () -> AggregateLifecycle.apply(userDataChangedEvent)
+                () -> AggregateLifecycle.apply(userDataCreatedEvent)
         );
     }
 

@@ -3,6 +3,7 @@ package org.homemade.user.profile.service.query.projection;
 import org.axonframework.config.ProcessingGroup;
 import org.axonframework.eventhandling.EventHandler;
 import org.homemade.common.event.UserDataChangedEvent;
+import org.homemade.common.event.UserDataCreatedEvent;
 import org.homemade.user.profile.service.service.UserProfileService;
 import org.springframework.stereotype.Component;
 
@@ -17,7 +18,14 @@ public class UserProfileProjection {
     }
 
     @EventHandler
-    public void on(UserDataChangedEvent event){
+    public void on(UserDataCreatedEvent event) {
+        System.out.println("Handling UserDataChangedEvent for: " + event.getEmail());
+        System.out.println(event.toString());
+        userProfileService.handleUserDataCreatedEvent(event);
+    }
+
+    @EventHandler
+    public void on(UserDataChangedEvent event) {
         System.out.println("Handling UserDataChangedEvent for: " + event.getEmail());
         System.out.println(event.toString());
         userProfileService.handleUserDataChangedEvent(event);
