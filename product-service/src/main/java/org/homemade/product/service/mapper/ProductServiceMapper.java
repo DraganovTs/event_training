@@ -1,6 +1,7 @@
 package org.homemade.product.service.mapper;
 
 import jakarta.validation.Valid;
+import org.homemade.common.event.UserDataCreatedEvent;
 import org.homemade.common.model.dto.CategoryDTO;
 import org.homemade.common.model.dto.OwnerDTO;
 import org.homemade.product.service.model.dto.ProductRequestDTO;
@@ -14,6 +15,8 @@ import java.util.ArrayList;
 
 @Component
 public class ProductServiceMapper {
+
+
     public Product mapProductRequestToProduct(@Valid ProductRequestDTO request, Category category, Owner owner) {
         return Product.builder()
                 .name(request.getName())
@@ -67,9 +70,18 @@ public class ProductServiceMapper {
 
 
     public Category mapCategoryDTOtoCategory(CategoryDTO request) {
-        System.out.println("map category: " + request.getCategoryName() );
+        System.out.println("map category: " + request.getCategoryName());
         return Category.builder()
                 .categoryName(request.getCategoryName())
+                .products(new ArrayList<>())
+                .build();
+    }
+
+    public Owner mapUserDataCreatedEventToOwner(UserDataCreatedEvent event) {
+        return Owner.builder()
+                .ownerId(event.getUserId())
+                .ownerName(event.getUsername())
+                .ownerEmail(event.getEmail())
                 .products(new ArrayList<>())
                 .build();
     }

@@ -1,6 +1,7 @@
 package org.homemade.product.service.service;
 
 
+import org.homemade.common.event.UserDataCreatedEvent;
 import org.homemade.product.service.exception.OwnerAlreadyExistsException;
 import org.homemade.product.service.exception.OwnerNotFoundException;
 import org.homemade.product.service.mapper.ProductServiceMapper;
@@ -43,10 +44,19 @@ public class OwnerService {
 
     }
 
+    @Transactional
+    public void crateOwnerFromUserCreatedEvent(UserDataCreatedEvent event) {
+        checkIfOwnerExist(event.getEmail());
+        Owner ownerToSave = mapper.mapUserDataCreatedEventToOwner(event);
+        ownerRepository.save(ownerToSave);
+    }
+
     @Transactional(readOnly = true)
     public void checkIfOwnerExist(String ownerEmail) {
         if (ownerRepository.existsByOwnerEmail(ownerEmail)) {
             throw new OwnerAlreadyExistsException("Owner already exists: " + ownerEmail);
         }
     }
+
+
 }
