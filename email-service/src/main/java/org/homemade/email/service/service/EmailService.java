@@ -1,5 +1,6 @@
 package org.homemade.email.service.service;
 
+import org.homemade.common.event.ProductDataCreatedEvent;
 import org.springframework.transaction.annotation.Transactional;
 import org.homemade.email.service.command.event.EmailMessageCreatedEvent;
 import org.homemade.email.service.command.event.EmailMessageDeletedEvent;
