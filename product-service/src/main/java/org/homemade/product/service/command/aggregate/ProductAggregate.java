@@ -6,19 +6,16 @@ import org.axonframework.modelling.command.AggregateIdentifier;
 import org.axonframework.modelling.command.AggregateLifecycle;
 import org.axonframework.spring.stereotype.Aggregate;
 import org.homemade.common.event.ProductDataChangedEvent;
+import org.homemade.common.event.ProductDataCreatedEvent;
 import org.homemade.product.service.command.CreateProductCommand;
 import org.homemade.product.service.command.DeleteProductCommand;
 import org.homemade.product.service.command.UpdateProductCommand;
 import org.homemade.product.service.command.event.ProductCreatedEvent;
 import org.homemade.product.service.command.event.ProductDeletedEvent;
 import org.homemade.product.service.command.event.ProductUpdatedEvent;
-import org.homemade.product.service.exception.ProductAlreadyExistsException;
-import org.homemade.product.service.model.entity.Product;
-import org.homemade.product.service.repository.ProductRepository;
 import org.springframework.beans.BeanUtils;
 
 import java.math.BigDecimal;
-import java.util.Optional;
 import java.util.UUID;
 
 @Aggregate
@@ -38,13 +35,13 @@ public class ProductAggregate {
     }
 
     @CommandHandler
-    public ProductAggregate(CreateProductCommand command, ProductRepository productRepository) {
+    public ProductAggregate(CreateProductCommand command) {
         ProductCreatedEvent productCreatedEvent = new ProductCreatedEvent();
         BeanUtils.copyProperties(command, productCreatedEvent);
-        ProductDataChangedEvent productDataChangedEvent = new ProductDataChangedEvent();
-        BeanUtils.copyProperties(command, productDataChangedEvent);
+        ProductDataCreatedEvent productDataCreatedEvent = new ProductDataCreatedEvent();
+        BeanUtils.copyProperties(command, productDataCreatedEvent);
         AggregateLifecycle.apply(productCreatedEvent).andThen(
-                () -> AggregateLifecycle.apply(productDataChangedEvent)
+                () -> AggregateLifecycle.apply(productDataCreatedEvent)
         );
     }
 

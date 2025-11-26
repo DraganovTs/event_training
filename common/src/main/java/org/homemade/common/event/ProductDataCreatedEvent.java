@@ -6,13 +6,13 @@ import java.math.BigDecimal;
 import java.util.UUID;
 
 @Data
-public class ProductDataChangedEvent {
-
+public class ProductDataCreatedEvent {
     private UUID productId;
     private String name;
     private String brand;
     private String description;
-    private UUID category;
     private BigDecimal price;
     private int unitsInStock;
+    private UUID categoryId;
+    private UUID ownerId;
 }
