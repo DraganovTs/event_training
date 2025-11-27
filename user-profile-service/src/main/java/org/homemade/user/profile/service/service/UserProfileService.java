@@ -1,6 +1,7 @@
 package org.homemade.user.profile.service.service;
 
 import jakarta.transaction.Transactional;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.homemade.common.event.ProductDataChangedEvent;
 import org.homemade.common.event.ProductDataCreatedEvent;
@@ -17,11 +18,11 @@ import org.homemade.user.profile.service.query.FindUserProfileQuery;
 import org.homemade.user.profile.service.repository.UserProfileRepository;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
 import java.util.UUID;
 
 @Slf4j
 @Service
+@RequiredArgsConstructor
 public class UserProfileService {
 
     private final UserProfileRepository userProfileRepository;
@@ -29,31 +30,21 @@ public class UserProfileService {
     private final ProductInfoMapper productInfoMapper;
     private final ProductInfoService productInfoService;
 
-    public UserProfileService(UserProfileRepository userProfileRepository, UserProfileMapper userProfileMapper,
-                              ProductInfoMapper productInfoMapper, ProductInfoService productInfoService) {
-        this.userProfileRepository = userProfileRepository;
-        this.userProfileMapper = userProfileMapper;
-        this.productInfoMapper = productInfoMapper;
-        this.productInfoService = productInfoService;
-    }
-
     public void handleUserDataCreatedEvent(UserDataCreatedEvent event) {
-        checkIfUserExistByUsernameAndEmail(event.getUsername(), event.getEmail());
+        checkIfUserAlreadyExists(event.getUsername(), event.getEmail());
         UserProfile userProfileToSave = userProfileMapper.mapUserDataCreatedEventToUserProfile(event);
         userProfileRepository.save(userProfileToSave);
     }
 
     public void handleUserDataChangedEvent(UserDataChangedEvent event) {
-        checkIfUserExistByUserId(event.getUserId());
-        UserProfile userProfileToSave = userProfileRepository.findById(event.getUserId()).get();
+        UserProfile userProfileToSave = getUserProfileOrThrow(event.getUserId());
         userProfileMapper.mapUserDataChangedEventToUserProfile(userProfileToSave, event);
         userProfileRepository.save(userProfileToSave);
     }
 
     @Transactional
     public void addProductToUserProfile(ProductDataCreatedEvent event) {
-        checkIfUserExistByUserId(event.getOwnerId());
-        UserProfile userProfile = userProfileRepository.findById(event.getOwnerId()).get();
+        UserProfile userProfile = getUserProfileOrThrow(event.getOwnerId());
         ProductInfo productInfo = productInfoMapper.mapPrductDataCreatedEventToProductInfo(event, userProfile);
         userProfile.getProducts().add(productInfo);
         userProfileRepository.save(userProfile);
@@ -62,56 +53,44 @@ public class UserProfileService {
 
     public void changeProductInfoForUserProfile(ProductDataChangedEvent event) {
         ProductInfo productInfo = productInfoService.getProductById(event.getProductId());
-        checkIfUserExistByUserId(productInfo.getUserProfile().getUserId());
 
-        UserProfile userProfile = userProfileRepository.findById(productInfo.getUserProfile().getUserId()).get();
+        getUserProfileOrThrow(productInfo.getUserProfile().getUserId());
 
-        userProfile.getProducts().stream()
-                .filter(product -> product.getProductId().equals(event.getProductId()))
-                .findFirst()
-                .ifPresent(product -> updateProductInfoFromEvent(product, event));
-
+        updateProductInfoFromEvent(productInfo, event);
         productInfoService.saveProductInfo(
                 productInfoMapper.mapProductDataChangedEventToProductInfo(event, productInfo)
         );
+    }
+
+    public UserProfileDTO findUserProfile(FindUserProfileQuery query) {
+        UserProfile userProfile = getUserProfileByUsernameOrThrow(query.getUsername());
+        return userProfileMapper.mapUserProfileToUserProfileDTO(userProfile);
+    }
+
+    private UserProfile getUserProfileOrThrow(UUID userId) {
+        return userProfileRepository.findById(userId)
+                .orElseThrow(() -> new UserProfileNotExist("User profile not exist with id: " + userId));
+    }
+
+    private UserProfile getUserProfileByUsernameOrThrow(String username) {
+        return userProfileRepository.findUserProfileByUsername(username)
+                .orElseThrow(() -> new UserProfileNotExist("User profile not exist with username " + username));
     }
 
     private void updateProductInfoFromEvent(ProductInfo productInfo, ProductDataChangedEvent event) {
         productInfo.setBrand(event.getBrand());
         productInfo.setDescription(event.getDescription());
         productInfo.setName(event.getName());
-        productInfo.setCategory(event.getCategory().toString());
+        if (event.getCategory() != null) {
+            productInfo.setCategory(event.getCategory().toString());
+        }
         productInfo.setUnitsInStock(event.getUnitsInStock());
     }
-    private void checkIfUserExistByUserId(UUID userId) {
-        Optional<UserProfile> optionalUserProfile = userProfileRepository.findById(userId);
-        if (optionalUserProfile.isEmpty()) {
-            throw new UserProfileNotExist("User profile not exist whit id: " + userId);
+
+    private void checkIfUserAlreadyExists(String username, String email) {
+        if (userProfileRepository.findUserProfileByUsername(username).isPresent()) {
+            throw new UserProfileAlreadyExist("User profile already exist with username: " + username +
+                    " email: " + email);
         }
     }
-
-
-    public UserProfileDTO findUserProfile(FindUserProfileQuery query) {
-        checkIfUserExistByUserName(query.getUsername());
-        UserProfile userProfile = userProfileRepository.findUserProfileByUsername(query.getUsername()).get();
-        return userProfileMapper.mapUserProfileToUserProfileDTO(userProfile);
-    }
-
-    private void checkIfUserExistByUserName(String username) {
-        Optional<UserProfile> optionalUserProfileByUsername = userProfileRepository.findUserProfileByUsername(username);
-        if (optionalUserProfileByUsername.isEmpty()) {
-            throw new UserProfileNotExist("User profile not exist whit username " + username);
-        }
-    }
-
-
-    private void checkIfUserExistByUsernameAndEmail(String username, String email) {
-        Optional<UserProfile> optionalUserProfile = userProfileRepository.findUserProfileByUsername(email);
-        if (optionalUserProfile.isPresent()) {
-            throw new UserProfileAlreadyExist("User profile already exist whit username: " + username +
-                    "email: " + email);
-        }
-    }
-
-
 }
