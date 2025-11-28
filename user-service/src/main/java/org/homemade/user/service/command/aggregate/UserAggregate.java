@@ -5,6 +5,7 @@ import org.axonframework.eventsourcing.EventSourcingHandler;
 import org.axonframework.modelling.command.AggregateIdentifier;
 import org.axonframework.modelling.command.AggregateLifecycle;
 import org.axonframework.spring.stereotype.Aggregate;
+import org.homemade.common.command.UpdateUserEmailCommand;
 import org.homemade.common.event.UserDataCreatedEvent;
 import org.homemade.user.service.command.CreateUserCommand;
 import org.homemade.user.service.command.DeleteUserCommand;
@@ -91,5 +92,8 @@ public class UserAggregate {
     public void on(UserDeletedEvent userDeletedEvent) {
         this.userId = userDeletedEvent.getUserId();
     }
+
+    @CommandHandler
+    public void handle(UpdateUserEmailCommand command) {}
 
 }

@@ -6,7 +6,7 @@ import org.axonframework.modelling.command.TargetAggregateIdentifier;
 
 import java.util.UUID;
 
-@Builder
+
 @Data
 public class UpdateUserEmailCommand {
     @TargetAggregateIdentifier

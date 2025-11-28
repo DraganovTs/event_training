@@ -1,6 +1,8 @@
 package org.homemade.user.service.command.controller;
 
 import jakarta.validation.Valid;
+import org.homemade.common.command.UpdateUserEmailCommand;
+import org.homemade.common.model.dto.EmailUpdateDTO;
 import org.homemade.common.model.dto.ResponseDTO;
 import org.homemade.user.service.model.dto.UserRequestDTO;
 import org.homemade.user.service.service.UserCommandService;
@@ -63,5 +65,17 @@ public class UserCommandController {
                         .status("Deleted")
                         .message("User deleted successfully")
                         .build());
+    }
+
+    @PatchMapping("/email")
+    public ResponseEntity<ResponseDTO> updateEmail(@RequestBody EmailUpdateDTO emailUpdateDTO) {
+
+        userCommandService.updateUserEmail(emailUpdateDTO);
+
+        return ResponseEntity.ok(ResponseDTO.builder()
+                .status("Updated")
+                .message("Email updated successfully")
+                .build());
+
     }
 }

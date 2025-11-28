@@ -1,17 +1,13 @@
-package org.homemade.common.command;
+package org.homemade.common.event.update.email;
 
-import lombok.Builder;
 import lombok.Data;
 import org.axonframework.modelling.command.TargetAggregateIdentifier;
 
 import java.util.UUID;
 
 @Data
-@Builder
-public class RollbackUserEmailCommand {
-    @TargetAggregateIdentifier
+public class UserEmailUpdatedEvent {
     private final UUID userId;
     private final String email;
     private final String newEmail;
-    private final String errorMessage;
 }

@@ -2,6 +2,8 @@ package org.homemade.user.service.service;
 
 import jakarta.validation.Valid;
 import org.axonframework.commandhandling.gateway.CommandGateway;
+import org.homemade.common.command.UpdateUserEmailCommand;
+import org.homemade.common.model.dto.EmailUpdateDTO;
 import org.homemade.user.service.command.CreateUserCommand;
 import org.homemade.user.service.command.DeleteUserCommand;
 import org.homemade.user.service.command.UpdateUserCommand;
@@ -37,5 +39,15 @@ public class UserCommandService {
                 .userId(userId)
                 .build();
         commandGateway.sendAndWait(deleteUserCommand);
+    }
+
+    public void updateUserEmail(EmailUpdateDTO emailUpdateDTO) {
+        UpdateUserEmailCommand updateUserEmailCommand = UpdateUserEmailCommand.builder()
+                .userId(emailUpdateDTO.getUserId())
+                .email(emailUpdateDTO.getOldEmail())
+                .newEmail(emailUpdateDTO.getNewEmail())
+                .build();
+
+        commandGateway.sendAndWait(updateUserEmailCommand);
     }
 }
