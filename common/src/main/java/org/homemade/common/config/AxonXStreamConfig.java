@@ -9,21 +9,25 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
 
+// ... existing code ...
 @Configuration
 public class AxonXStreamConfig {
+
+    private static final String[] TRUSTED_PACKAGES = {"org.homemade.**"};
+
     @Bean
     @Primary
     public Serializer xStreamSerializer() {
-        XStream xstream = new XStream();
-
-        XStream.setupDefaultSecurity(xstream);
-
-        xstream.addPermission(new WildcardTypePermission(new String[]{
-                "org.homemade.**"
-        }));
-
+        XStream xstream = configureXStream();
         return XStreamSerializer.builder()
                 .xStream(xstream)
                 .build();
+    }
+
+    private XStream configureXStream() {
+        XStream xstream = new XStream();
+        XStream.setupDefaultSecurity(xstream);
+        xstream.addPermission(new WildcardTypePermission(TRUSTED_PACKAGES));
+        return xstream;
     }
 }
