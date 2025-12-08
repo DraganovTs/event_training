@@ -8,6 +8,7 @@ import java.util.UUID;
 
 
 @Data
+@Builder
 public class UpdateUserEmailCommand {
     @TargetAggregateIdentifier
     private final UUID userId;
