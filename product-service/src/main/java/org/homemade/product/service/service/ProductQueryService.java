@@ -15,25 +15,38 @@ import java.util.List;
 public class ProductQueryService {
 
     private final QueryGateway queryGateway;
-    private final ProductServiceMapper productMapper;
+    private final ProductServiceMapper productServiceMapper;
 
-    public ProductQueryService(QueryGateway queryGateway, ProductServiceMapper productMapper) {
+    public ProductQueryService(QueryGateway queryGateway, ProductServiceMapper productServiceMapper) {
         this.queryGateway = queryGateway;
-        this.productMapper = productMapper;
+        this.productServiceMapper = productServiceMapper;
     }
 
     public ProductResponseDTO findUserQuery(String name, String brand) {
-        FindProductQuery findProductQuery = new FindProductQuery(name, brand);
-        return productMapper
-                .mapProductToProductResponse(queryGateway.query(findProductQuery, ResponseTypes.instanceOf(Product.class)).join());
+        return findByNameAndBrand(name, brand);
+    }
+
+    public ProductResponseDTO findByNameAndBrand(String name, String brand) {
+        Product product = queryForSingleProduct(new FindProductQuery(name, brand));
+        return productServiceMapper.mapProductToProductResponse(product);
     }
 
     public List<ProductResponseDTO> getAllProducts() {
-        return queryGateway
-                .query(new FindAllProductsQuery(), ResponseTypes.multipleInstancesOf(Product.class))
-                .join()
+        return queryForAllProducts(new FindAllProductsQuery())
                 .stream()
-                .map(productMapper::mapProductToProductResponse)
+                .map(productServiceMapper::mapProductToProductResponse)
                 .toList();
+    }
+
+    private Product queryForSingleProduct(FindProductQuery query) {
+        return queryGateway
+                .query(query, ResponseTypes.instanceOf(Product.class))
+                .join();
+    }
+
+    private List<Product> queryForAllProducts(FindAllProductsQuery query) {
+        return queryGateway
+                .query(query, ResponseTypes.multipleInstancesOf(Product.class))
+                .join();
     }
 }
