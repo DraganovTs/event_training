@@ -1,0 +1,16 @@
+package org.homemade.common.event.orchestration.command;
+
+import lombok.Builder;
+import lombok.Data;
+import org.axonframework.modelling.command.TargetAggregateIdentifier;
+
+import java.util.UUID;
+
+@Data
+@Builder
+public class UpdateOwnerEmailCommand {
+    @TargetAggregateIdentifier
+    private final UUID ownerId;
+    private final String ownerEmail;
+    private final String newOwnerEmail;
+}
