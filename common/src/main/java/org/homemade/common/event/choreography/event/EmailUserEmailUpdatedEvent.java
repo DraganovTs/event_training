@@ -1,4 +1,4 @@
-package org.homemade.common.event.update.email;
+package org.homemade.common.event.choreography.event;
 
 import lombok.Data;
 

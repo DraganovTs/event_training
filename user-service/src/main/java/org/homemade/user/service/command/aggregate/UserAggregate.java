@@ -5,8 +5,9 @@ import org.axonframework.eventsourcing.EventSourcingHandler;
 import org.axonframework.modelling.command.AggregateIdentifier;
 import org.axonframework.modelling.command.AggregateLifecycle;
 import org.axonframework.spring.stereotype.Aggregate;
-import org.homemade.common.command.UpdateUserEmailCommand;
 import org.homemade.common.event.UserDataCreatedEvent;
+import org.homemade.common.event.orchestration.command.UpdateUserEmailCommand;
+import org.homemade.common.event.orchestration.event.UserEmailUpdatedEvent;
 import org.homemade.user.service.command.CreateUserCommand;
 import org.homemade.user.service.command.DeleteUserCommand;
 import org.homemade.user.service.command.UpdateUserCommand;
@@ -94,6 +95,16 @@ public class UserAggregate {
     }
 
     @CommandHandler
-    public void handle(UpdateUserEmailCommand command) {}
+    public void handle(UpdateUserEmailCommand command) {
+        UserEmailUpdatedEvent userEmailUpdatedEvent = new UserEmailUpdatedEvent();
+        BeanUtils.copyProperties(command, userEmailUpdatedEvent);
+        AggregateLifecycle.apply(userEmailUpdatedEvent);
+
+    }
+
+    @EventSourcingHandler
+    public void on(UserEmailUpdatedEvent userEmailUpdatedEvent) {
+        this.email = userEmailUpdatedEvent.getNewEmail();
+    }
 
 }

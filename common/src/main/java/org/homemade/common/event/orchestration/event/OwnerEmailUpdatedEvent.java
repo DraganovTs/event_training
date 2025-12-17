@@ -6,7 +6,7 @@ import java.util.UUID;
 
 @Data
 public class OwnerEmailUpdatedEvent {
-    private final UUID ownerId;
-    private final String ownerEmail;
-    private final String newOwnerEmail;
+    private  UUID ownerId;
+    private  String ownerEmail;
+    private  String newOwnerEmail;
 }

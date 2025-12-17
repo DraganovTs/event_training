@@ -6,9 +6,9 @@ import java.util.UUID;
 
 @Data
 public class OwnerEmailRollbackEvent {
-    private final UUID ownerId;
-    private final String ownerEmail;
-    private final String newOwnerEmail;
-    private final String errorMessage;
+    private  UUID ownerId;
+    private  String ownerEmail;
+    private  String newOwnerEmail;
+    private  String errorMessage;
 
 }

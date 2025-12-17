@@ -2,6 +2,7 @@ package org.homemade.user.service.query.projection;
 
 import org.axonframework.config.ProcessingGroup;
 import org.axonframework.eventhandling.EventHandler;
+import org.homemade.common.event.choreography.event.UserEmailUpdatedEvent;
 import org.homemade.user.service.command.event.UserCreatedEvent;
 import org.homemade.user.service.command.event.UserDeletedEvent;
 import org.homemade.user.service.command.event.UserUpdatedEvent;
@@ -34,5 +35,10 @@ public class UserProjection {
     @EventHandler
     public void on(UserDeletedEvent event) {
         userService.deleteUser(event);
+    }
+
+    @EventHandler
+    public void on(UserEmailUpdatedEvent event) {
+        userService.updateUserEmail(event);
     }
 }

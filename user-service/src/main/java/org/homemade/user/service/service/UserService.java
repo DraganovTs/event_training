@@ -2,6 +2,7 @@ package org.homemade.user.service.service;
 
 import jakarta.transaction.Transactional;
 import org.axonframework.eventhandling.gateway.EventGateway;
+import org.homemade.common.event.choreography.event.UserEmailUpdatedEvent;
 import org.homemade.common.model.dto.UserResponseDTO;
 import org.homemade.user.service.command.event.UserCreatedEvent;
 import org.homemade.user.service.command.event.UserDeletedEvent;
@@ -66,6 +67,14 @@ public class UserService {
     }
 
     @Transactional
+    public void updateUserEmail(UserEmailUpdatedEvent event) {
+        checkUserExistByEmail(event.getEmail());
+        User userToUpdate = userRepository.findByEmail(event.getEmail()).get();
+        userToUpdate.setEmail(event.getNewEmail());
+        userRepository.save(userToUpdate);
+    }
+
+    @Transactional
     public void checkUserExistByEmail(String email) {
         userRepository.findByEmail(email).orElseThrow(() -> new UserNotFoundException("User not found with email: " + email));
     }
@@ -91,4 +100,6 @@ public class UserService {
         System.out.println("db is called to get all users");
         return userRepository.findAll();
     }
+
+
 }
