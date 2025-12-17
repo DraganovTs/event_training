@@ -8,10 +8,9 @@ import java.util.UUID;
 
 @Data
 @Builder
-public class RollbackEmailUserCommand {
+public class UpdateEmailUserEmailCommand {
     @TargetAggregateIdentifier
-    private final UUID userId;
-    private final String email;
-    private final String newEmail;
-    private final String errorMessage;
+    private final UUID emailUserId;
+    private final String ownerEmail;
+    private final String newOwnerEmail;
 }

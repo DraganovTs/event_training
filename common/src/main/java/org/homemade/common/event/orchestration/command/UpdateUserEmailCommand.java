@@ -10,7 +10,7 @@ import java.util.UUID;
 @Builder
 public class UpdateUserEmailCommand {
     @TargetAggregateIdentifier
-    private final UUID emailUserId;
-    private final String ownerEmail;
-    private final String newOwnerEmail;
+    private final UUID userId;
+    private final String email;
+    private final String newEmail;
 }
