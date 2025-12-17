@@ -1,7 +1,6 @@
 package org.homemade.user.service.service;
 
 import jakarta.transaction.Transactional;
-import org.axonframework.eventhandling.gateway.EventGateway;
 import org.homemade.common.event.choreography.event.UserEmailUpdatedEvent;
 import org.homemade.common.model.dto.UserResponseDTO;
 import org.homemade.user.service.command.event.UserCreatedEvent;
