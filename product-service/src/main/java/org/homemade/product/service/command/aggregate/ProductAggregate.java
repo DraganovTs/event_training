@@ -7,12 +7,15 @@ import org.axonframework.modelling.command.AggregateLifecycle;
 import org.axonframework.spring.stereotype.Aggregate;
 import org.homemade.common.event.ProductDataChangedEvent;
 import org.homemade.common.event.ProductDataCreatedEvent;
+import org.homemade.common.event.orchestration.command.UpdateOwnerEmailCommand;
+import org.homemade.common.event.orchestration.event.OwnerEmailUpdatedEvent;
 import org.homemade.product.service.command.CreateProductCommand;
 import org.homemade.product.service.command.DeleteProductCommand;
 import org.homemade.product.service.command.UpdateProductCommand;
 import org.homemade.product.service.command.event.ProductCreatedEvent;
 import org.homemade.product.service.command.event.ProductDeletedEvent;
 import org.homemade.product.service.command.event.ProductUpdatedEvent;
+import org.homemade.product.service.query.FindProductQuery;
 import org.springframework.beans.BeanUtils;
 
 import java.math.BigDecimal;
@@ -92,5 +95,17 @@ public class ProductAggregate {
         this.productId = productDeletedEvent.getProductId();
     }
 
+
+    @CommandHandler
+    public void handle(UpdateOwnerEmailCommand updateOwnerEmailCommand) {
+        OwnerEmailUpdatedEvent ownerEmailUpdatedEvent = new OwnerEmailUpdatedEvent();
+        BeanUtils.copyProperties(updateOwnerEmailCommand, ownerEmailUpdatedEvent);
+        AggregateLifecycle.apply(ownerEmailUpdatedEvent);
+    }
+
+    @EventSourcingHandler
+    public void on(OwnerEmailUpdatedEvent ownerEmailUpdatedEvent) {
+        this.owner = ownerEmailUpdatedEvent.getOwnerId();
+    }
 
 }

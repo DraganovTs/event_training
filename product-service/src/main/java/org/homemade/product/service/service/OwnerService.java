@@ -2,10 +2,11 @@ package org.homemade.product.service.service;
 
 
 import org.homemade.common.event.UserDataCreatedEvent;
+import org.homemade.common.event.orchestration.event.OwnerEmailUpdatedEvent;
+import org.homemade.common.model.dto.OwnerDTO;
 import org.homemade.product.service.exception.OwnerAlreadyExistsException;
 import org.homemade.product.service.exception.OwnerNotFoundException;
 import org.homemade.product.service.mapper.ProductServiceMapper;
-import org.homemade.common.model.dto.OwnerDTO;
 import org.homemade.product.service.model.entity.Owner;
 import org.homemade.product.service.repository.OwnerRepository;
 import org.springframework.stereotype.Service;
@@ -24,7 +25,7 @@ public class OwnerService {
         this.mapper = mapper;
     }
 
-
+    @Transactional(readOnly = true)
     public Owner getOwnerById(UUID ownerId) {
         return ownerRepository.findById(ownerId).orElseThrow(() -> new OwnerNotFoundException(
                 "owner not found whit id: " + ownerId
@@ -33,30 +34,37 @@ public class OwnerService {
 
     @Transactional
     public OwnerDTO createOwner(OwnerDTO request) {
-
-        checkIfOwnerExist(request.getOwnerEmail());
-
-        Owner ownerToSave = mapper.mapOwnerDTOToOwner(request);
-
-        Owner savedOwner = ownerRepository.save(ownerToSave);
-
+        assertOwnerEmailDoesNotExist(request.getOwnerEmail());
+        Owner savedOwner = ownerRepository.save(mapper.mapOwnerDTOToOwner(request));
         return mapper.mapOwnerToOwnerDTO(savedOwner);
-
     }
 
     @Transactional
-    public void crateOwnerFromUserCreatedEvent(UserDataCreatedEvent event) {
-        checkIfOwnerExist(event.getEmail());
-        Owner ownerToSave = mapper.mapUserDataCreatedEventToOwner(event);
-        ownerRepository.save(ownerToSave);
+    public void createOwnerFromUserCreatedEvent(UserDataCreatedEvent event) {
+        assertOwnerEmailDoesNotExist(event.getEmail());
+        ownerRepository.save(mapper.mapUserDataCreatedEventToOwner(event));
     }
 
-    @Transactional(readOnly = true)
-    public void checkIfOwnerExist(String ownerEmail) {
-        if (ownerRepository.existsByOwnerEmail(ownerEmail)) {
-            throw new OwnerAlreadyExistsException("Owner already exists: " + ownerEmail);
+    @Transactional
+    public void updateOwnerEmail(OwnerEmailUpdatedEvent event) {
+        assertOwnerEmailExists(event.getOwnerEmail());
+
+        Owner ownerToUpdate = getOwnerById(event.getOwnerId());
+        ownerToUpdate.setOwnerEmail(event.getNewOwnerEmail());
+
+        ownerRepository.save(ownerToUpdate);
+    }
+
+    private void assertOwnerEmailExists(String ownerEmail) {
+        if (!ownerRepository.existsByOwnerEmail(ownerEmail)) {
+            throw new OwnerNotFoundException("Owner not found whit id " + ownerEmail);
         }
     }
 
+    private void assertOwnerEmailDoesNotExist(String ownerEmail) {
+        if (ownerRepository.existsByOwnerEmail(ownerEmail)) {
+            throw new OwnerAlreadyExistsException("Owner already exist whit id " + ownerEmail);
+        }
+    }
 
 }

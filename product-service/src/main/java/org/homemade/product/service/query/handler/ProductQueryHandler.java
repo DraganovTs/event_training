@@ -4,6 +4,7 @@ import org.axonframework.queryhandling.QueryHandler;
 import org.homemade.product.service.model.entity.Product;
 import org.homemade.product.service.query.FindAllProductsQuery;
 import org.homemade.product.service.query.FindProductQuery;
+import org.homemade.product.service.service.OwnerService;
 import org.homemade.product.service.service.ProductService;
 import org.springframework.stereotype.Component;
 
@@ -27,4 +28,6 @@ public class ProductQueryHandler {
     public List<Product> findAllProducts(FindAllProductsQuery findAllProductsQuery) {
         return productService.findAllProducts();
     }
+
+
 }
