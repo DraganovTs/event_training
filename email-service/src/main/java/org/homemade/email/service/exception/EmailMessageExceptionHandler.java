@@ -16,4 +16,9 @@ public class EmailMessageExceptionHandler extends BaseExceptionHandler {
     public ResponseEntity<ErrorResponseDTO> handleEmailMessageAlreadyExist(Exception exception, WebRequest request) {
         return buildErrorResponse(exception, request, HttpStatus.CONFLICT, "EMAIL_MESSAGE_ALREADY_EXIST");
     }
+
+    @ExceptionHandler(value = {EmailUserNotFoundException.class})
+    public ResponseEntity<ErrorResponseDTO> handleEmailUserNotFoundException(Exception exception, WebRequest request) {
+        return buildErrorResponse(exception, request, HttpStatus.NOT_FOUND, "EMAIL_USER_NOT_FOUND");
+    }
 }

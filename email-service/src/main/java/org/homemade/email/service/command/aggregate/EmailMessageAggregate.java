@@ -6,6 +6,8 @@ import org.axonframework.modelling.command.AggregateIdentifier;
 import org.axonframework.modelling.command.AggregateLifecycle;
 import org.axonframework.spring.stereotype.Aggregate;
 import org.homemade.common.event.EmailDataChangedEvent;
+import org.homemade.common.event.orchestration.command.UpdateEmailUserEmailCommand;
+import org.homemade.common.event.orchestration.event.EmailUserEmailUpdatedEvent;
 import org.homemade.email.service.command.CreateEmailMessageCommand;
 import org.homemade.email.service.command.DeleteEmailMessageCommand;
 import org.homemade.email.service.command.UpdateEmailMessageCommand;
@@ -81,6 +83,18 @@ public class EmailMessageAggregate {
     @EventSourcingHandler
     public void on(EmailMessageDeletedEvent emailMessageDeletedEvent) {
         this.messageId = emailMessageDeletedEvent.getMessageId();
+    }
+
+    @CommandHandler
+    public void handle(UpdateEmailUserEmailCommand updateEmailUserEmailCommand) {
+        EmailUserEmailUpdatedEvent emailUserEmailUpdatedEvent = new EmailUserEmailUpdatedEvent();
+        BeanUtils.copyProperties(updateEmailUserEmailCommand, emailUserEmailUpdatedEvent);
+        AggregateLifecycle.apply(emailUserEmailUpdatedEvent);
+    }
+
+    @EventSourcingHandler
+    public void on(EmailUserEmailUpdatedEvent emailUserEmailUpdatedEvent) {
+        this.emailUserId = emailUserEmailUpdatedEvent.getEmailUserId();
     }
 
 
