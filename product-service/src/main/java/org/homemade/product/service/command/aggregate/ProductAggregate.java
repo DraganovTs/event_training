@@ -7,7 +7,10 @@ import org.axonframework.modelling.command.AggregateLifecycle;
 import org.axonframework.spring.stereotype.Aggregate;
 import org.homemade.common.event.ProductDataChangedEvent;
 import org.homemade.common.event.ProductDataCreatedEvent;
+import org.homemade.common.event.orchestration.command.RollbackOwnerEmailCommand;
+import org.homemade.common.event.orchestration.command.RollbackUserEmailCommand;
 import org.homemade.common.event.orchestration.command.UpdateOwnerEmailCommand;
+import org.homemade.common.event.orchestration.event.OwnerEmailRollbackEvent;
 import org.homemade.common.event.orchestration.event.OwnerEmailUpdatedEvent;
 import org.homemade.product.service.command.CreateProductCommand;
 import org.homemade.product.service.command.DeleteProductCommand;
@@ -33,6 +36,7 @@ public class ProductAggregate {
     private int unitsInStock;
     private UUID category;
     private UUID owner;
+    private String errorMessage;
 
     public ProductAggregate() {
     }
@@ -106,6 +110,19 @@ public class ProductAggregate {
     @EventSourcingHandler
     public void on(OwnerEmailUpdatedEvent ownerEmailUpdatedEvent) {
         this.owner = ownerEmailUpdatedEvent.getOwnerId();
+    }
+
+    @CommandHandler
+    public void handle(RollbackOwnerEmailCommand rollbackOwnerEmailCommand) {
+        OwnerEmailRollbackEvent ownerEmailRollbackEvent = new OwnerEmailRollbackEvent();
+        BeanUtils.copyProperties(rollbackOwnerEmailCommand, ownerEmailRollbackEvent);
+        AggregateLifecycle.apply(ownerEmailRollbackEvent);
+    }
+
+    @EventSourcingHandler
+    public void on(OwnerEmailRollbackEvent ownerEmailRollbackEvent) {
+        this.owner = ownerEmailRollbackEvent.getOwnerId();
+        this.errorMessage = ownerEmailRollbackEvent.getErrorMessage();
     }
 
 }

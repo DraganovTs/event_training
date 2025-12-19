@@ -3,6 +3,7 @@ package org.homemade.product.service.query.projection;
 import org.axonframework.config.ProcessingGroup;
 import org.axonframework.eventhandling.EventHandler;
 import org.homemade.common.event.UserDataCreatedEvent;
+import org.homemade.common.event.orchestration.event.OwnerEmailRollbackEvent;
 import org.homemade.common.event.orchestration.event.OwnerEmailUpdatedEvent;
 import org.homemade.common.event.orchestration.event.UserEmailUpdatedEvent;
 import org.homemade.product.service.service.OwnerService;
@@ -31,4 +32,6 @@ public class OwnerProjection {
         System.out.println(event.toString());
         ownerService.updateOwnerEmail(event);
     }
+
+
 }
